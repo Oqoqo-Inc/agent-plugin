@@ -13,11 +13,11 @@ const REQUIRED_FILES = [
   ".claude-plugin/marketplace.json",
   ".cursor-plugin/marketplace.json",
   ".github/plugin/marketplace.json",
-  ".github/workflows/validate.yml",
   "distributions/claude-code/plugins/oqoqo/.claude-plugin/plugin.json",
   "distributions/claude-code/plugins/oqoqo/.mcp.json",
   "distributions/openai/plugins/oqoqo/.codex-plugin/plugin.json",
   "distributions/openai/plugins/oqoqo/.mcp.json",
+  "distributions/openai/plugins/oqoqo/assets/oqoqo-logo.png",
   "LICENSE",
   "plugins/oqoqo/assets/oqoqo-logo.png",
   "plugins/oqoqo/mcp.json",
@@ -68,6 +68,15 @@ export async function validateRelease(rootPath) {
       `Release is missing ${path}`,
     );
   }
+  const releaseFiles = [];
+  for (const path of paths) {
+    if ((await lstat(path)).isFile()) releaseFiles.push(relative(root, path));
+  }
+  assert.deepEqual(
+    releaseFiles.sort(),
+    [...REQUIRED_FILES].sort(),
+    "Release contains an unexpected or missing file",
+  );
 
   await assertOnlyPlugin(root, "plugins");
   await assertOnlyPlugin(root, "distributions/openai/plugins");
