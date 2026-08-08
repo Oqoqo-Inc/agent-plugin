@@ -1,0 +1,30 @@
+{
+  "name": "oqoqo",
+  "owner": {
+    "name": "Oqoqo",
+    "url": "https://beta.oqoqo.ai"
+  },
+  "description": "Official plugins for Oqoqo, the evals platform for building headless products.",
+  "plugins": [
+    {
+      "name": "oqoqo",
+      "source": "./distributions/claude-code/plugins/oqoqo",
+      "description": "Operate and analyze Oqoqo projects and eval experiments, and search Oqoqo product documentation from your agent.",
+      "version": "1.1.0",
+      "author": {
+        "name": "Oqoqo",
+        "url": "https://beta.oqoqo.ai"
+      },
+      "homepage": "https://beta.oqoqo.ai",
+      "repository": "https://github.com/Oqoqo-Inc/agent-plugin",
+      "license": "MIT",
+      "keywords": [
+        "oqoqo",
+        "evals",
+        "experiments",
+        "headless-products",
+        "mcp"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "oqoqo",
+  "owner": {
+    "name": "Oqoqo"
+  },
+  "metadata": {
+    "description": "Official plugins for Oqoqo, the evals platform for building headless products.",
+    "version": "1.1.0"
+  },
+  "plugins": [
+    {
+      "name": "oqoqo",
+      "description": "Operate and analyze Oqoqo projects and eval experiments, and search Oqoqo product documentation from your agent.",
+      "version": "1.1.0",
+      "source": "./plugins/oqoqo"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "oqoqo",
+  "version": "1.1.0",
+  "description": "Operate and analyze Oqoqo projects and eval experiments, and search Oqoqo product documentation from your agent.",
+  "author": {
+    "name": "Oqoqo",
+    "url": "https://beta.oqoqo.ai"
+  },
+  "homepage": "https://beta.oqoqo.ai",
+  "repository": "https://github.com/Oqoqo-Inc/agent-plugin",
+  "license": "MIT",
+  "keywords": [
+    "oqoqo",
+    "evals",
+    "experiments",
+    "headless-products",
+    "mcp"
+  ],
+  "displayName": "Oqoqo",
+  "mcpServers": "./.mcp.json"
+}

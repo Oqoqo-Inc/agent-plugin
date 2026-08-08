@@ -1,0 +1,13 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "oqoqo": {
+      "type": "streamable-http",
+      "url": "https://beta.mcp.oqoqo.ai/mcp"
+    },
+    "oqoqo-product-docs": {
+      "type": "streamable-http",
+      "url": "https://docs.oqoqo.ai/mcp"
+    }
+  }
+}

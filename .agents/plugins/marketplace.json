@@ -1,0 +1,20 @@
+{
+  "name": "oqoqo",
+  "interface": {
+    "displayName": "Oqoqo"
+  },
+  "plugins": [
+    {
+      "name": "oqoqo",
+      "source": {
+        "source": "local",
+        "path": "./distributions/openai/plugins/oqoqo"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

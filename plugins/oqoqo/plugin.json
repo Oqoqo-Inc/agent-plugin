@@ -1,0 +1,33 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "oqoqo",
+  "version": "1.1.0",
+  "description": "Operate and analyze Oqoqo projects and eval experiments, and search Oqoqo product documentation from your agent.",
+  "author": {
+    "name": "Oqoqo",
+    "url": "https://beta.oqoqo.ai"
+  },
+  "homepage": "https://beta.oqoqo.ai",
+  "repository": "https://github.com/Oqoqo-Inc/agent-plugin",
+  "license": "MIT",
+  "keywords": ["oqoqo", "evals", "experiments", "headless-products", "mcp"],
+  "extensions": {
+    "ai.oqoqo.distribution": {
+      "displayName": "Oqoqo",
+      "category": "Developer Tools",
+      "longDescription": "Oqoqo is the evals platform for building headless products. Teams run eval experiments with real agents in production-like sandboxes, compare pass rates and lift, inspect verdicts, trajectories, and frictions, and improve skills, MCP servers, CLIs, SDKs, and other headless interfaces with evidence. This plugin exposes Oqoqo's OAuth-connected agent surface for project operations, experiments, monitoring, results, and evidence, together with public Oqoqo product documentation. Secure credential entry remains in the Web UI.",
+      "marketplaceDescription": "Official plugins for Oqoqo, the evals platform for building headless products.",
+      "brandColor": "#B25634",
+      "logo": "./assets/oqoqo-logo.png",
+      "openaiSubmission": "./openai-submission.json",
+      "defaultPrompt": [
+        "Show my Oqoqo identity and organization.",
+        "Show the Oqoqo project context for this request.",
+        "Search the Oqoqo product documentation and explain how to create an experiment.",
+        "List the latest experiments in this Oqoqo project and summarize their status.",
+        "Inspect this Oqoqo project's catalog and explain what can be evaluated.",
+        "Compare the treatments in the latest completed Oqoqo experiment and cite the strongest evidence."
+      ]
+    }
+  }
+}

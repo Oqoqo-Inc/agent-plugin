@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "oqoqo": {
+      "type": "http",
+      "url": "https://beta.mcp.oqoqo.ai/mcp"
+    },
+    "oqoqo-product-docs": {
+      "type": "http",
+      "url": "https://docs.oqoqo.ai/mcp"
+    }
+  }
+}
