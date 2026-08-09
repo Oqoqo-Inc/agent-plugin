@@ -3,7 +3,7 @@
   "mcpServers": {
     "oqoqo": {
       "type": "streamable-http",
-      "url": "https://beta.mcp.oqoqo.ai/mcp"
+      "url": "https://mcp.oqoqo.ai/mcp"
     },
     "oqoqo-product-docs": {
       "type": "streamable-http",

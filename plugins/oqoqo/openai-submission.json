@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "supportUrl": "https://beta.oqoqo.ai/#faq",
-  "privacyPolicyUrl": "https://beta.oqoqo.ai/privacy",
-  "termsUrl": "https://beta.oqoqo.ai/terms",
+  "supportUrl": "https://oqoqo.ai/#faq",
+  "privacyPolicyUrl": "https://oqoqo.ai/privacy",
+  "termsUrl": "https://oqoqo.ai/terms",
   "releaseNotes": "Initial public submission of the Oqoqo plugin for project operations, eval experiments, monitoring, results, evidence, and public product-documentation search.",
   "positiveTestCases": [
     {

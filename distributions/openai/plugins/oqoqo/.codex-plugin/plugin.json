@@ -1,12 +1,12 @@
 {
   "name": "oqoqo",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Operate and analyze Oqoqo projects and eval experiments, and search Oqoqo product documentation from your agent.",
   "author": {
     "name": "Oqoqo",
-    "url": "https://beta.oqoqo.ai"
+    "url": "https://oqoqo.ai"
   },
-  "homepage": "https://beta.oqoqo.ai",
+  "homepage": "https://oqoqo.ai",
   "repository": "https://github.com/Oqoqo-Inc/agent-plugin",
   "license": "MIT",
   "keywords": [
@@ -27,9 +27,9 @@
       "Read",
       "Write"
     ],
-    "websiteURL": "https://beta.oqoqo.ai",
-    "privacyPolicyURL": "https://beta.oqoqo.ai/privacy",
-    "termsOfServiceURL": "https://beta.oqoqo.ai/terms",
+    "websiteURL": "https://oqoqo.ai",
+    "privacyPolicyURL": "https://oqoqo.ai/privacy",
+    "termsOfServiceURL": "https://oqoqo.ai/terms",
     "defaultPrompt": [
       "Show my Oqoqo identity and organization.",
       "Show the Oqoqo project context for this request.",

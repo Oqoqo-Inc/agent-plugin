@@ -1,13 +1,13 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "oqoqo",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Operate and analyze Oqoqo projects and eval experiments, and search Oqoqo product documentation from your agent.",
   "author": {
     "name": "Oqoqo",
-    "url": "https://beta.oqoqo.ai"
+    "url": "https://oqoqo.ai"
   },
-  "homepage": "https://beta.oqoqo.ai",
+  "homepage": "https://oqoqo.ai",
   "repository": "https://github.com/Oqoqo-Inc/agent-plugin",
   "license": "MIT",
   "keywords": ["oqoqo", "evals", "experiments", "headless-products", "mcp"],

@@ -5,13 +5,13 @@
   },
   "metadata": {
     "description": "Official plugins for Oqoqo, the evals platform for building headless products.",
-    "version": "1.1.0"
+    "version": "1.1.1"
   },
   "plugins": [
     {
       "name": "oqoqo",
       "description": "Operate and analyze Oqoqo projects and eval experiments, and search Oqoqo product documentation from your agent.",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "source": "./plugins/oqoqo"
     }
   ]

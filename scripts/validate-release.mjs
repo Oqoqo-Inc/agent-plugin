@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
 import { lstat, readFile, readdir, realpath } from "node:fs/promises";
-import { basename, dirname, isAbsolute, relative, resolve } from "node:path";
+import { basename, dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const PUBLIC_REPOSITORY = "https://github.com/Oqoqo-Inc/agent-plugin";
 const PLUGIN_NAME = "oqoqo";
 const MARKETPLACE_NAME = "oqoqo";
-const PRODUCTION_MCP_URL = "https://beta.mcp.oqoqo.ai/mcp";
+const PRODUCTION_MCP_URL = "https://mcp.oqoqo.ai/mcp";
 const DOCS_MCP_URL = "https://docs.oqoqo.ai/mcp";
 const REQUIRED_FILES = [
   ".agents/plugins/marketplace.json",
