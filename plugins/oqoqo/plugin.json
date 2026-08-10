@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "oqoqo",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Operate and analyze Oqoqo projects and eval experiments, and search Oqoqo product documentation from your agent.",
   "author": {
     "name": "Oqoqo",
@@ -15,8 +15,8 @@
     "ai.oqoqo.distribution": {
       "displayName": "Oqoqo",
       "category": "Developer Tools",
-      "longDescription": "Oqoqo is the evals platform for building headless products. Teams run eval experiments with real agents in production-like sandboxes, compare pass rates and lift, inspect verdicts, trajectories, and frictions, and improve skills, MCP servers, CLIs, SDKs, and other headless interfaces with evidence. This plugin exposes Oqoqo's OAuth-connected agent surface for project operations, experiments, monitoring, results, and evidence, together with public Oqoqo product documentation. Secure credential entry remains in the Web UI.",
-      "marketplaceDescription": "Official plugins for Oqoqo, the evals platform for building headless products.",
+      "longDescription": "Oqoqo is the easiest way to build evals and custom benchmarks for real-world tasks. Teams run eval experiments with real agents in isolated Machines, compare pass rates and lift, inspect verdicts, trajectories, and frictions, and improve skills, MCP servers, CLIs, SDKs, and other headless interfaces with evidence. This plugin exposes Oqoqo's OAuth-connected agent surface for project operations, experiments, monitoring, results, and evidence, together with public Oqoqo product documentation. Secure credential entry remains in the Web UI.",
+      "marketplaceDescription": "Official plugins for Oqoqo — the easiest way to build evals and custom benchmarks for real-world tasks.",
       "brandColor": "#B25634",
       "logo": "./assets/oqoqo-logo.png",
       "openaiSubmission": "./openai-submission.json",
