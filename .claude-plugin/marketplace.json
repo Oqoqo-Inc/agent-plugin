@@ -4,13 +4,13 @@
     "name": "Oqoqo",
     "url": "https://oqoqo.ai"
   },
-  "description": "Official plugins for Oqoqo — the easiest way to build evals and custom benchmarks for real-world tasks.",
+  "description": "Official plugins for Oqoqo — the easiest way to build evals and custom benchmarks for real-world agentic tasks.",
   "plugins": [
     {
       "name": "oqoqo",
       "source": "./distributions/claude-code/plugins/oqoqo",
       "description": "Operate and analyze Oqoqo projects and eval experiments, and search Oqoqo product documentation from your agent.",
-      "version": "1.1.2",
+      "version": "1.1.3",
       "author": {
         "name": "Oqoqo",
         "url": "https://oqoqo.ai"

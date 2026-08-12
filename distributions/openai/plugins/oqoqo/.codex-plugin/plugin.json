@@ -1,6 +1,6 @@
 {
   "name": "oqoqo",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Operate and analyze Oqoqo projects and eval experiments, and search Oqoqo product documentation from your agent.",
   "author": {
     "name": "Oqoqo",
@@ -20,7 +20,7 @@
   "interface": {
     "displayName": "Oqoqo",
     "shortDescription": "Operate and analyze Oqoqo projects and eval experiments, and search Oqoqo product documentation from your agent.",
-    "longDescription": "Oqoqo is the easiest way to build evals and custom benchmarks for real-world tasks. Teams run eval experiments with real agents in isolated Machines, compare pass rates and lift, inspect verdicts, trajectories, and frictions, and improve skills, MCP servers, CLIs, SDKs, and other headless interfaces with evidence. This plugin exposes Oqoqo's OAuth-connected agent surface for project operations, experiments, monitoring, results, and evidence, together with public Oqoqo product documentation. Secure credential entry remains in the Web UI.",
+    "longDescription": "Oqoqo is the easiest way to build evals and custom benchmarks for real-world agentic tasks. Teams run eval experiments with real agents in isolated Machines, compare pass rates and lift, inspect verdicts, trajectories, and frictions, and improve skills, MCP servers, CLIs, SDKs, and other headless interfaces with evidence. This plugin exposes Oqoqo's OAuth-connected agent surface for project operations, experiments, monitoring, results, and evidence, together with public Oqoqo product documentation. Secure credential entry remains in the Web UI.",
     "developerName": "Oqoqo",
     "category": "Developer Tools",
     "capabilities": [
