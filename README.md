@@ -37,4 +37,12 @@ copilot plugin marketplace add Oqoqo-Inc/agent-plugin
 copilot plugin install oqoqo@oqoqo
 ```
 
+## Agent skills
+
+Install all Oqoqo eval authoring skills with the Skills CLI:
+
+```bash
+npx skills add Oqoqo-Inc/agent-plugin --skill '*'
+```
+
 The plugin connects to the production Oqoqo MCP endpoint and the public Oqoqo product-documentation MCP endpoint. OAuth and authorization remain at the MCP server boundary. The repository contains no credentials.

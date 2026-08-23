@@ -3,7 +3,7 @@
   "supportUrl": "https://oqoqo.ai/#faq",
   "privacyPolicyUrl": "https://oqoqo.ai/privacy",
   "termsUrl": "https://oqoqo.ai/terms",
-  "releaseNotes": "Initial public submission of the Oqoqo plugin for project operations, eval experiments, monitoring, results, evidence, and public product-documentation search.",
+  "releaseNotes": "Adds Oqoqo skills for planning, authoring, and setting up product evals. The same skills are available through the plugin and the public Skills CLI catalog.",
   "positiveTestCases": [
     {
       "name": "Read identity",

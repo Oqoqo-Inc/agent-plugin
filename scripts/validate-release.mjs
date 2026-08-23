@@ -8,6 +8,17 @@ const PLUGIN_NAME = "oqoqo";
 const MARKETPLACE_NAME = "oqoqo";
 const PRODUCTION_MCP_URL = "https://mcp.oqoqo.ai/mcp";
 const DOCS_MCP_URL = "https://docs.oqoqo.ai/mcp";
+const SKILL_NAMES = [
+  "product-eval-authoring",
+  "product-eval-setup",
+  "product-eval-tasks",
+];
+const SKILL_ROOTS = [
+  "skills",
+  "plugins/oqoqo/skills",
+  "distributions/openai/plugins/oqoqo/skills",
+  "distributions/claude-code/plugins/oqoqo/skills",
+];
 const REQUIRED_FILES = [
   ".agents/plugins/marketplace.json",
   ".claude-plugin/marketplace.json",
@@ -25,6 +36,9 @@ const REQUIRED_FILES = [
   "plugins/oqoqo/plugin.json",
   "README.md",
   "scripts/validate-release.mjs",
+  ...SKILL_NAMES.flatMap((skillName) =>
+    SKILL_ROOTS.map((skillRoot) => `${skillRoot}/${skillName}/SKILL.md`),
+  ),
 ];
 const ALLOWED_TOP_LEVEL = new Set([
   ".agents",
@@ -36,6 +50,7 @@ const ALLOWED_TOP_LEVEL = new Set([
   "plugins",
   "README.md",
   "scripts",
+  "skills",
 ]);
 
 export async function validateRelease(rootPath) {
@@ -147,6 +162,7 @@ export async function validateRelease(rootPath) {
     ".github/plugin/marketplace.json",
     portableManifest.version,
   );
+  await validateSkills(root);
 
   for (const path of paths) {
     if (!(await lstat(path)).isFile() || !isTextPath(path)) continue;
@@ -225,6 +241,25 @@ async function validateMcp(path, expectedType) {
     type: expectedType,
     url: DOCS_MCP_URL,
   });
+}
+
+async function validateSkills(root) {
+  for (const skillName of SKILL_NAMES) {
+    const contents = await Promise.all(
+      SKILL_ROOTS.map((skillRoot) =>
+        readFile(resolve(root, skillRoot, skillName, "SKILL.md"), "utf8"),
+      ),
+    );
+    assert.match(
+      contents[0],
+      new RegExp(`^---\\nname: ${skillName}\\ndescription: \\S`),
+      `${skillName} has invalid frontmatter`,
+    );
+    assert.ok(
+      contents.every((content) => content === contents[0]),
+      `${skillName} drifted between public packages`,
+    );
+  }
 }
 
 async function assertOnlyPlugin(root, relativePath) {
