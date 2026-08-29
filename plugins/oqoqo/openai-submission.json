@@ -3,7 +3,7 @@
   "supportUrl": "https://oqoqo.ai/#faq",
   "privacyPolicyUrl": "https://oqoqo.ai/privacy",
   "termsUrl": "https://oqoqo.ai/terms",
-  "releaseNotes": "Adds Oqoqo skills for planning, authoring, and setting up product evals. The same skills are available through the plugin and the public Skills CLI catalog.",
+  "releaseNotes": "Adds an account-wide notification preference matrix for email and in-app delivery. Agents can inspect editable, required, and unavailable channel states, then update individual editable cells without changing omitted preferences.",
   "positiveTestCases": [
     {
       "name": "Read identity",
@@ -46,6 +46,13 @@
       "expectedBehavior": "Call the Mintlify-hosted Oqoqo documentation tools and answer from the returned public documentation, with relevant page references.",
       "expectedResultShape": "A concise product explanation grounded in Oqoqo documentation search results and linked documentation pages.",
       "fixture": "The public Oqoqo documentation MCP endpoint is available without authentication."
+    },
+    {
+      "name": "Manage notification channels",
+      "prompt": "Turn off email for experiment updates, but keep in-app experiment updates on.",
+      "expectedBehavior": "Call inspect_notification_preferences, then call manage_notification_preferences with an experiment-updates patch that sets email to false and in-app to true. Do not change omitted preference rows or required cells.",
+      "expectedResultShape": "An account-scoped notification matrix with stable row and channel keys. Experiment updates show email disabled and in-app enabled. Required and not-applicable cells remain explicit and read-only.",
+      "fixture": "An authenticated reviewer account with Knock notification preferences configured."
     }
   ],
   "negativeTestCases": [
