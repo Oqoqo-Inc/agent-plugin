@@ -10,7 +10,7 @@
     "Show the Oqoqo project context for this request.",
     "List the latest experiments in this Oqoqo project and summarize their status."
   ],
-  "releaseNotes": "Updates the plugin descriptions, starter prompts, and review metadata. Updates the eval-authoring skill to use the staged upload lifecycle for local File and Skill resources. The package also declares the public product-documentation MCP connection; the OpenAI directory currently permits one connected MCP server, so this submission connects the authenticated production Oqoqo server.",
+  "releaseNotes": "Version 1.2.3 removes the separate documentation MCP from the canonical plugin and every client distribution. Each package declares only its authenticated Oqoqo environment server. Product documentation guidance uses the public documentation index and pages instead of documentation MCP resources or search tools. Descriptions, starter prompts, review cases, install instructions, and release checks no longer assume a documentation MCP connection. Product MCP tools, OAuth, authorization, and upload approval safeguards remain unchanged.",
   "positiveTestCases": [
     {
       "name": "Read identity",
@@ -46,13 +46,6 @@
       "expectedBehavior": "Find the latest completed experiment, call analyze_results for treatment comparison, and separate measured results from interpretation.",
       "expectedResultShape": "A structured comparison with treatment IDs, sample counts, pass rates or lift when available, and evidence references to supporting runs or verdicts.",
       "fixture": "A seeded project with one completed multi-treatment experiment that has judgeable runs and stored analysis evidence."
-    },
-    {
-      "name": "Search product documentation",
-      "prompt": "Search the Oqoqo product documentation and explain how to create an experiment.",
-      "expectedBehavior": "Call the Mintlify-hosted Oqoqo documentation tools and answer from the returned public documentation, with relevant page references.",
-      "expectedResultShape": "A concise product explanation grounded in Oqoqo documentation search results and linked documentation pages.",
-      "fixture": "The public Oqoqo documentation MCP endpoint is available without authentication."
     },
     {
       "name": "Manage notification channels",

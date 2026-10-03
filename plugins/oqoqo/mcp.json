@@ -4,10 +4,6 @@
     "oqoqo": {
       "type": "streamable-http",
       "url": "https://mcp.oqoqo.ai/mcp"
-    },
-    "oqoqo-product-docs": {
-      "type": "streamable-http",
-      "url": "https://docs.oqoqo.ai/mcp"
     }
   }
 }

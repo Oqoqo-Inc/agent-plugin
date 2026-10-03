@@ -7,7 +7,6 @@ const PUBLIC_REPOSITORY = "https://github.com/Oqoqo-Inc/agent-plugin";
 const PLUGIN_NAME = "oqoqo";
 const MARKETPLACE_NAME = "oqoqo";
 const PRODUCTION_MCP_URL = "https://mcp.oqoqo.ai/mcp";
-const DOCS_MCP_URL = "https://docs.oqoqo.ai/mcp";
 const SKILL_NAMES = [
   "product-eval-authoring",
   "product-eval-setup",
@@ -229,17 +228,14 @@ async function validatePortableMarketplace(root, path, version) {
 
 async function validateMcp(path, expectedType) {
   const document = await json(path);
-  assert.deepEqual(Object.keys(document.mcpServers ?? {}), [
-    PLUGIN_NAME,
-    "oqoqo-product-docs",
-  ]);
+  assert.deepEqual(
+    Object.keys(document.mcpServers ?? {}),
+    [PLUGIN_NAME],
+    "Release must contain only the authenticated product MCP server",
+  );
   assert.deepEqual(document.mcpServers[PLUGIN_NAME], {
     type: expectedType,
     url: PRODUCTION_MCP_URL,
-  });
-  assert.deepEqual(document.mcpServers["oqoqo-product-docs"], {
-    type: expectedType,
-    url: DOCS_MCP_URL,
   });
 }
 

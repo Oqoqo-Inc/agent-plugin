@@ -1,7 +1,7 @@
 {
   "name": "oqoqo",
-  "version": "1.2.2",
-  "description": "Operate and analyze Oqoqo projects and eval experiments, and search Oqoqo product documentation from your agent.",
+  "version": "1.2.3",
+  "description": "Operate and analyze Oqoqo projects and eval experiments from your agent.",
   "author": {
     "name": "Oqoqo",
     "url": "https://oqoqo.ai"
@@ -47,7 +47,7 @@
         "demo_recording_url": "https://oqoqo.ai/openai-plugin-demo.mp4"
       },
       "publication": {
-        "release_notes": "Updates the plugin descriptions, starter prompts, and review metadata. Updates the eval-authoring skill to use the staged upload lifecycle for local File and Skill resources. The package also declares the public product-documentation MCP connection; the OpenAI directory currently permits one connected MCP server, so this submission connects the authenticated production Oqoqo server."
+        "release_notes": "Version 1.2.3 removes the separate documentation MCP from the canonical plugin and every client distribution. Each package declares only its authenticated Oqoqo environment server. Product documentation guidance uses the public documentation index and pages instead of documentation MCP resources or search tools. Descriptions, starter prompts, review cases, install instructions, and release checks no longer assume a documentation MCP connection. Product MCP tools, OAuth, authorization, and upload approval safeguards remain unchanged."
       }
     }
   }

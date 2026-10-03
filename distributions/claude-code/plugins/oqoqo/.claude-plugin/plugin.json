@@ -1,7 +1,7 @@
 {
   "name": "oqoqo",
-  "version": "1.2.2",
-  "description": "Operate and analyze Oqoqo projects and eval experiments, and search Oqoqo product documentation from your agent.",
+  "version": "1.2.3",
+  "description": "Operate and analyze Oqoqo projects and eval experiments from your agent.",
   "author": {
     "name": "Oqoqo",
     "url": "https://oqoqo.ai"

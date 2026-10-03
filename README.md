@@ -45,4 +45,4 @@ Install all Oqoqo eval authoring skills with the Skills CLI:
 npx skills add Oqoqo-Inc/agent-plugin --skill '*'
 ```
 
-The plugin connects to the production Oqoqo MCP endpoint and the public Oqoqo product-documentation MCP endpoint. OAuth and authorization remain at the MCP server boundary. The repository contains no credentials.
+The plugin connects only to the authenticated production Oqoqo MCP endpoint. Skills use the public documentation index at https://docs.oqoqo.ai/llms.txt; no documentation MCP is bundled. OAuth and authorization remain at the MCP server boundary. The repository contains no credentials.

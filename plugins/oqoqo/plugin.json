@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "oqoqo",
-  "version": "1.2.2",
-  "description": "Operate and analyze Oqoqo projects and eval experiments, and search Oqoqo product documentation from your agent.",
+  "version": "1.2.3",
+  "description": "Operate and analyze Oqoqo projects and eval experiments from your agent.",
   "author": {
     "name": "Oqoqo",
     "url": "https://oqoqo.ai"
@@ -16,7 +16,7 @@
       "displayName": "Oqoqo",
       "shortDescription": "Run and analyze agent evals",
       "category": "Developer Tools",
-      "longDescription": "Oqoqo is the easiest way to build evals and custom benchmarks for real-world agentic tasks. Teams run eval experiments with real agents in isolated Machines, compare pass rates and lift, inspect verdicts, trajectories, and frictions, and improve skills, MCP servers, CLIs, SDKs, and other headless interfaces with evidence. This plugin exposes Oqoqo's OAuth-connected agent surface for project operations, experiments, monitoring, results, and evidence, together with public Oqoqo product documentation. Secure credential entry remains in the Web UI.",
+      "longDescription": "Oqoqo is the easiest way to build evals and custom benchmarks for real-world agentic tasks. Teams run eval experiments with real agents in isolated Machines, compare pass rates and lift, inspect verdicts, trajectories, and frictions, and improve skills, MCP servers, CLIs, SDKs, and other headless interfaces with evidence. This plugin exposes Oqoqo's OAuth-connected agent surface for project operations, experiments, monitoring, results, and evidence. Secure credential entry remains in the Web UI.",
       "marketplaceDescription": "Official plugins for Oqoqo — the easiest way to build evals and custom benchmarks for real-world agentic tasks.",
       "brandColor": "#B25634",
       "logo": "./assets/oqoqo-logo.png",
@@ -24,7 +24,6 @@
       "defaultPrompt": [
         "Show my Oqoqo identity and organization.",
         "Show the Oqoqo project context for this request.",
-        "Search the Oqoqo product documentation and explain how to create an experiment.",
         "List the latest experiments in this Oqoqo project and summarize their status.",
         "Inspect this Oqoqo project's catalog and explain what can be evaluated.",
         "Compare the treatments in the latest completed Oqoqo experiment and cite the strongest evidence."

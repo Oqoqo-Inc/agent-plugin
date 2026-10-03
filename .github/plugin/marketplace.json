@@ -5,13 +5,13 @@
   },
   "metadata": {
     "description": "Official plugins for Oqoqo — the easiest way to build evals and custom benchmarks for real-world agentic tasks.",
-    "version": "1.2.2"
+    "version": "1.2.3"
   },
   "plugins": [
     {
       "name": "oqoqo",
-      "description": "Operate and analyze Oqoqo projects and eval experiments, and search Oqoqo product documentation from your agent.",
-      "version": "1.2.2",
+      "description": "Operate and analyze Oqoqo projects and eval experiments from your agent.",
+      "version": "1.2.3",
       "source": "./plugins/oqoqo"
     }
   ]

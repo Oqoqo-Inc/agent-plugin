@@ -10,9 +10,9 @@ job, from the first question to the last thing you tell them to do.
 
 Two other skills cover the craft. Use `product-eval-tasks` for writing the tasks
 and the rubrics. Use `product-eval-setup` for the machine and the seeded data.
-For general guidance on how Oqoqo works, read `mintlify://skills/oqoqo` from the
-`oqoqo-product-docs` MCP server. If that resource is unavailable, use the
-server's documentation search tools for the same guidance.
+For general guidance on how Oqoqo works, start with the public documentation
+index at `https://docs.oqoqo.ai/llms.txt`, then read the pages relevant to the
+workflow. Do not assume that a separate documentation MCP server is connected.
 
 ## Never end a turn on a question
 
