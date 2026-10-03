@@ -139,9 +139,16 @@ the thing it points at.
 1. The machine, which needs a name and a definition. The definition holds
    `packages`, `setup`, `services` and `variables`. Put shell lines in `setup`
    to install what the fixture needs.
-2. The files, either from `archiveBase64` under 4,000,000 characters or from a
-   public GitHub repository. Private repositories do not work.
-3. The assets, which are the MCP server, the CLI, the SDK and any skill. Declare
+2. The files. Upload a local folder or ZIP; never put archive bytes or base64
+   in a tool argument. With the CLI, run
+   `oqoqo uploads create <path> --kind file`. With MCP, call `create_upload`.
+   If you can run commands, declare the file (name, exact size, and SHA-256),
+   send it with `curl -X PUT` to the returned transfer target, then call
+   `complete_upload`. Otherwise, give the user the returned `uploadUrl` and
+   poll `get_upload` until it completes. A public GitHub repository also works
+   through `author_resource`; private repositories do not.
+3. The assets, which are the MCP server, the CLI, the SDK and any skill. Upload
+   a local skill the same way with kind `skill`. Declare
    every credential by name. For a remote MCP server, use `auth: "oauth"` for
    OAuth or `headerNames` for static headers. For a local MCP server, use
    `envNames`. On a CLI or SDK, use

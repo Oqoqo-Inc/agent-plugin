@@ -3,7 +3,14 @@
   "supportUrl": "https://oqoqo.ai/#faq",
   "privacyPolicyUrl": "https://oqoqo.ai/privacy",
   "termsUrl": "https://oqoqo.ai/terms",
-  "releaseNotes": "Adds an account-wide notification preference matrix for email and in-app delivery. Agents can inspect editable, required, and unavailable channel states, then update individual editable cells without changing omitted preferences.",
+  "demoRecordingUrl": "https://oqoqo.ai/openai-plugin-demo.mp4",
+  "directoryDescription": "Plan, build, run, and analyze Oqoqo evaluation experiments from your agent. Use guided skills to set up product evals, author tasks and evaluation resources, inspect project catalogs, start and monitor experiments, publish results, compare treatments, and review runs, verdicts, trajectories, frictions, and retained outputs. OAuth keeps each request in the correct organization and project. Secure credential entry stays in the Oqoqo web app.",
+  "starterPrompts": [
+    "Show my Oqoqo identity and organization.",
+    "Show the Oqoqo project context for this request.",
+    "List the latest experiments in this Oqoqo project and summarize their status."
+  ],
+  "releaseNotes": "Updates the plugin descriptions, starter prompts, and review metadata. Updates the eval-authoring skill to use the staged upload lifecycle for local File and Skill resources. The package also declares the public product-documentation MCP connection; the OpenAI directory currently permits one connected MCP server, so this submission connects the authenticated production Oqoqo server.",
   "positiveTestCases": [
     {
       "name": "Read identity",
