@@ -10,7 +10,7 @@
     "Show the Oqoqo project context for this request.",
     "List the latest experiments in this Oqoqo project and summarize their status."
   ],
-  "releaseNotes": "Version 1.2.4 bundles exactly five positive and three negative review cases from the canonical source so reviewer expectations remain aligned with the submitted ZIP. The package declares only the authenticated Oqoqo product MCP and retains the three guided product-eval skills. Public experiment updates require explicit approval before replacing the results at an existing public link. Credentials stay outside the package in the secure review form.",
+  "releaseNotes": "Version 1.2.5 adds the Task File mount path rule to the product eval authoring skill. Each mountPath is a relative path inside the agent's working directory, such as helpdesk-web or data/customer-fixtures, or . for the working directory itself, and task instructions refer to the same relative path. The package still declares only the authenticated Oqoqo product MCP and the three guided product-eval skills. Credentials stay outside the package in the secure review form.",
   "positiveTestCases": [
     {
       "name": "Read identity",

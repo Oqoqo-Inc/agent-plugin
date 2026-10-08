@@ -159,7 +159,11 @@ the thing it points at.
    each interface you want to measure. Add a combined treatment only when the
    combination itself is part of the test.
 5. The tasks, which point at the machine through `environmentId` and at the
-   files through `assetAttachments`.
+   files through `assetAttachments`. Give each file its own `mountPath`, a
+   relative path inside the agent's working directory, e.g., `helpdesk-web` or
+   `data/customer-fixtures`. Use `.` to put the file in the working directory
+   itself. Never start the path with `/` or `~`. Refer to the same relative
+   path in the instructions, e.g., `helpdesk-web/`.
 
 `bulk_author_resources` takes at most 20 operations and stops at the first
 failure. Write each dependency stage in batches of 20 or fewer. Finish steps 1
