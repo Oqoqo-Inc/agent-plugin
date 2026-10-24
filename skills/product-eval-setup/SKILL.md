@@ -1,6 +1,6 @@
 ---
 name: product-eval-setup
-description: Build the machine, fixtures, treatments and seeded data an eval batch runs on, so that parallel runs stay valid and the baseline stays clean. Use when setting up an experiment environment, deciding what belongs on a machine versus a treatment, or seeding a product account with test data.
+description: Build the machine, fixtures, treatments (toolsets) and seeded data an eval batch runs on, so that parallel runs stay valid and the baseline stays clean. Use when setting up an experiment environment, deciding what belongs on a machine versus a treatment, or seeding a product account with test data.
 ---
 
 # Set up the environment for an eval
@@ -20,23 +20,23 @@ Put only framework dependencies on the machine, e.g., the web framework and the
 build tool the fixture needs. Put every piece of the product in a treatment, as
 a skill, an MCP server, a CLI, or an SDK.
 
-Do not add a setup command that checks the product is absent. Treatment assets
+Do not add a setup command that checks the product is absent. Treatment tools
 are installed before setup runs, so that check fails the machine build for every
 treatment that carries the product, and every run under it is lost. Leaving the
 product out of `packages` and `setup` is the guarantee, so there is nothing left
 to verify.
 
-Secrets belong on the asset that needs them, not on the machine, so that the
+Secrets belong on the tool that needs them, not on the machine, so that the
 baseline never sees a credential.
 
-You cannot enter a secret yourself, so every asset gets its credential in one
-of three ways. Work out which one applies before you create the asset.
+You cannot enter a secret yourself, so every tool gets its credential in one
+of three ways. Work out which one applies before you create the tool.
 
 1. The agent gets its own during the run, e.g., by provisioning a throwaway
    account from an unauthenticated endpoint. Each run then has its own account
    and cannot collide with the others.
 2. A person connects OAuth or enters a key afterwards. You declare the required
-   input on the asset, create the asset anyway, and tell them it is waiting on
+   input on the tool, create the tool anyway, and tell them it is waiting on
    them. Call `get_setup_links` and hand over the link for the page they need.
 
    Declare it by name only. For a remote MCP server, use `auth: "oauth"` for
@@ -46,14 +46,14 @@ of three ways. Work out which one applies before you create the asset.
    kind. A `value` field, a `{{PLACEHOLDER}}` string and a `secret: true` flag
    are all refused, because secure values are entered in the web app and nowhere
    else.
-3. The asset needs no credential. That is normal for a skill. For anything that
+3. The tool needs no credential. That is normal for a skill. For anything that
    reaches the product, check before you decide it, because a tool that appears
    to need nothing is often getting a credential some other way.
 
 Prefer the first when the product offers it, and the second when it does not.
 Ask which one they want, say which one you are assuming, and keep working.
 
-Say in your summary which of the three ways each asset uses, and name every
+Say in your summary which of the three ways each tool uses, and name every
 connection or key a person still has to finish before the eval can run.
 
 Do not rely on preflight to remind them. Preflight reports a missing MCP header
@@ -61,7 +61,7 @@ and a missing OAuth connection, but it does not report a CLI or SDK variable
 that was declared and never filled in. The plan comes back ready with that
 variable still empty, and the task that depends on it then fails in every run
 for a reason nobody was warned about. Declaring the name is still worth doing,
-because it puts a labelled field on the asset page for the person to fill in,
+because it puts a labelled field on the tool page for the person to fill in,
 but treat it as a note to the reader rather than as something the platform will
 chase. Write the key, the page it is entered on, and the task it blocks into
 your handover, and say plainly that preflight will look green without it.
@@ -149,5 +149,5 @@ confusion instead of skill.
 The first run of a new machine is the one that finds the setup errors. Spend one
 cheap run on a task that only reports what it can see, e.g., which capabilities
 are present and where they were found. It costs a single run and tells you
-whether the assets actually reached the agent, which is otherwise invisible
+whether the tools actually reached the agent, which is otherwise invisible
 until a whole matrix comes back wrong.

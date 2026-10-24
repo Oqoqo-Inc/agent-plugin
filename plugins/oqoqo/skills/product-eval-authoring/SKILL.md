@@ -1,6 +1,6 @@
 ---
 name: product-eval-authoring
-description: Build a complete eval set in Oqoqo from a product's documentation, including the tasks, the machine, the files, the assets and the treatments. Use when someone points at a product and asks for an eval set to be created, or asks what they should evaluate about their product. Covers what to ask them, how to find the product's MCP server, CLI and SDK, and how to write everything into an Oqoqo project.
+description: Build a complete eval set in Oqoqo from a product's documentation, including the tasks, the machine, the files, the tools and the treatments (toolsets). Use when someone points at a product and asks for an eval set to be created, or asks what they should evaluate about their product. Covers what to ask them, how to find the product's MCP server, CLI and SDK, and how to write everything into an Oqoqo project.
 ---
 
 # Build an eval set in Oqoqo from a product's docs
@@ -52,8 +52,8 @@ each task rather than to the whole set.
 | Live interaction | do real work in a real account | an account, a key someone enters by hand, and seeded data | give it its own target if it writes |
 | Knowledge | explain how it would handle a situation | nothing | cheapest, and the standard machine will do |
 
-The kind decides which assets a task needs. Work out the kind first and the
-assets second, not the other way round.
+The kind decides what a task needs. Work out the kind first and what it needs
+second, not the other way round.
 
 Use the three kinds as a checklist of what to cover. They are not a quota to
 fill. Write at least one task of every kind the product can support. Do not add
@@ -85,7 +85,7 @@ does not mean naming a file or a place to put it.
 ## Find out what the product ships
 
 You need to know whether the product has an MCP server, a CLI, an SDK or a
-published skill, because those are what a treatment carries.
+published skill, because those are the tools a treatment (toolset) carries.
 
 Check the product's own domain first. Many products publish one or more of
 these files:
@@ -112,7 +112,7 @@ Before the first resource write, send one plan update that includes:
 
 - The scope and any product areas left out.
 - Every proposed task and its kind.
-- The Machine, fixture files, treatment assets and Treatments.
+- The Machine, fixture files, tools and Treatments (toolsets).
 - The expected Run count for one trial and for two trials.
 
 Calculate the Run count as Tasks multiplied by Treatments multiplied by trials.
@@ -133,7 +133,7 @@ exact shapes come from these schemas. Do not infer write shapes from catalog
 resources or probe the contract with failed writes.
 
 Use the order below. A task refers to its machine and its files by ID, and a
-treatment refers to its assets by version ID, so nothing can be written before
+treatment refers to its tools by version ID, so nothing can be written before
 the thing it points at.
 
 1. The machine, which needs a name and a definition. The definition holds
@@ -147,7 +147,7 @@ the thing it points at.
    `complete_upload`. Otherwise, give the user the returned `uploadUrl` and
    poll `get_upload` until it completes. A public GitHub repository also works
    through `author_resource`; private repositories do not.
-3. The assets, which are the MCP server, the CLI, the SDK and any skill. Upload
+3. The tools, which are the MCP server, the CLI, the SDK and any skill. Upload
    a local skill the same way with kind `skill`. Declare
    every credential by name. For a remote MCP server, use `auth: "oauth"` for
    OAuth or `headerNames` for static headers. For a local MCP server, use
@@ -155,9 +155,9 @@ the thing it points at.
    `variables: [{name: "THE_NAME", required: true}]`. Never send a value. Keep
    the version IDs that come back, which start with `mcpver_`, `cliver_`,
    `sdkver_` and `sklver_`.
-4. The treatments. Write a baseline with every list empty and one treatment for
-   each interface you want to measure. Add a combined treatment only when the
-   combination itself is part of the test.
+4. The treatments (toolsets). Write a baseline with every list empty and one
+   treatment for each interface you want to measure. Add a combined treatment
+   only when the combination itself is part of the test.
 5. The tasks, which point at the machine through `environmentId` and at the
    files through `assetAttachments`. Give each file its own `mountPath`, a
    relative path inside the agent's working directory, e.g., `helpdesk-web` or
@@ -179,7 +179,7 @@ kind, including Tasks, use the short key. A public ID for those kinds is invalid
 input, not a revision conflict. Use the current `expectedUpdatedAt` value. A
 Task update also needs its current `version` and `versionId`.
 
-Editing an asset mints a new version ID, and a treatment keeps pointing at the
+Editing a tool mints a new version ID, and a treatment keeps pointing at the
 old one. So any change to a skill, MCP server, CLI or SDK after the treatments
 exist means updating every treatment that carries it. Get the credential
 declarations right in step 3 and you avoid the round trip.
