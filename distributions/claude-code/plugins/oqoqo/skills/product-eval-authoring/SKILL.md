@@ -35,7 +35,13 @@ its documented user jobs and every task kind it supports. Broad coverage is the
 default.
 
 Call `get_project_context` for the project. If there is more than one and nobody
-says which, use the one that is already active.
+says which, use the one that is already active. Keep its `organization.id`:
+every write you make passes it as `expected_organization_id`, and every CLI
+command passes it as `--expected-organization-id`. Another session can sign in
+again and move the shared sign-in to another organization. Then the write fails
+with `organization_scope_changed` and changes nothing, instead of landing in
+the wrong organization. Tell the user, and read the context again before you
+continue.
 
 Read the documentation the way `product-eval-tasks` describes, which is an index
 first and then five or six pages. Do not start writing tasks before you can say

@@ -1,6 +1,6 @@
 {
   "name": "oqoqo",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "Operate and analyze Oqoqo projects and eval experiments from your agent.",
   "author": {
     "name": "Oqoqo",
@@ -98,7 +98,7 @@
         }
       },
       "publication": {
-        "release_notes": "Version 1.2.7 updates the product eval skills to the new product words. The MCP servers, skills, CLIs, and SDKs of a project are Tools, and a treatment is a toolset: the set of tools an agent gets in a run. The package still declares only the authenticated Oqoqo product MCP and the three guided product-eval skills. Credentials stay outside the package in the secure review form."
+        "release_notes": "Version 1.2.8 adds an organization guard to the product eval skills. Before a write, the agent reads the organization from get_identity or get_project_context and passes it as expected_organization_id, or as --expected-organization-id in the CLI. If another session signs in to a different organization, the write fails with organization_scope_changed and changes nothing. The package still declares only the authenticated Oqoqo product MCP and the three guided product-eval skills. Credentials stay outside the package in the secure review form."
       }
     }
   }
