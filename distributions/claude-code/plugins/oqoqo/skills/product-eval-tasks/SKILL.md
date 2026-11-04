@@ -244,10 +244,12 @@ Make the task ask for a short written report of what it did, and grade that.
 That is for a live interaction task, and it does not mean naming a file or a
 place to put it.
 
-Each criterion is pass or fail on its own, and the task passes only if all of
-them pass. There is no partial credit, no weighting, and no threshold such as
-eight out of ten. If you catch yourself writing weights, gates, or a scoring
-formula, the criteria are doing too much and should be fewer and plainer.
+Make each criterion pass or fail on its own, and let the task pass only if all
+of them pass. That is the default rubric, and it is the one to use. A rubric can
+also weight its criteria or pass at a threshold such as eight out of ten, but
+then a run passes while a requirement fails. If you catch yourself writing
+weights, gates, or a scoring formula, the criteria are doing too much and should
+be fewer and plainer.
 
 Write one criterion for each separate thing that has to be true for the work to
 count, and keep the list to between two and five. Every criterion has to pass

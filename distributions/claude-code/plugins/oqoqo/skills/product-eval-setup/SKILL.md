@@ -21,10 +21,10 @@ build tool the fixture needs. Put every piece of the product in a treatment, as
 a skill, an MCP server, a CLI, or an SDK.
 
 Do not add a setup command that checks the product is absent. Treatment tools
-are installed before setup runs, so that check fails the machine build for every
-treatment that carries the product, and every run under it is lost. Leaving the
-product out of `packages` and `setup` is the guarantee, so there is nothing left
-to verify.
+that install from a package manager are installed before setup runs, so that
+check fails the machine build for every treatment that carries the product, and
+every run under it is lost. Leaving the product out of `packages` and `setup` is
+the guarantee, so there is nothing left to verify.
 
 Secrets belong on the tool that needs them, not on the machine, so that the
 baseline never sees a credential.
@@ -43,9 +43,9 @@ of three ways. Work out which one applies before you create the tool.
    OAuth or `headerNames` for static headers. For a local MCP server, use
    `envNames`. On a CLI or SDK, use
    `variables: [{name: "THE_NAME", required: true}]`. Do not send a value of any
-   kind. A `value` field, a `{{PLACEHOLDER}}` string and a `secret: true` flag
-   are all refused, because secure values are entered in the web app and nowhere
-   else.
+   kind. A `value` field and a `secret: true` flag are refused, because secure
+   values are entered in the web app and nowhere else. Where a command or URL
+   needs the value, write the declared name as `{{THE_NAME}}`.
 3. The tool needs no credential. That is normal for a skill. For anything that
    reaches the product, check before you decide it, because a tool that appears
    to need nothing is often getting a credential some other way.
@@ -56,15 +56,13 @@ Ask which one they want, say which one you are assuming, and keep working.
 Say in your summary which of the three ways each tool uses, and name every
 connection or key a person still has to finish before the eval can run.
 
-Do not rely on preflight to remind them. Preflight reports a missing MCP header
-and a missing OAuth connection, but it does not report a CLI or SDK variable
-that was declared and never filled in. The plan comes back ready with that
-variable still empty, and the task that depends on it then fails in every run
-for a reason nobody was warned about. Declaring the name is still worth doing,
-because it puts a labelled field on the tool page for the person to fill in,
-but treat it as a note to the reader rather than as something the platform will
-chase. Write the key, the page it is entered on, and the task it blocks into
-your handover, and say plainly that preflight will look green without it.
+Mark every key a task cannot run without as `required: true`. Preflight then
+blocks the launch until someone fills it in, and returns the page where it goes.
+It does the same for a missing MCP header and a missing OAuth connection.
+Preflight does not check a variable declared without `required: true`. The plan
+comes back ready with that variable still empty, and the task that depends on
+it then fails in every run for a reason nobody was warned about. Write each key,
+the page it is entered on, and the task it blocks into your handover.
 
 ## Design for runs happening at once
 

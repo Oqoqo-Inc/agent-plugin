@@ -7,11 +7,20 @@ const PUBLIC_REPOSITORY = "https://github.com/Oqoqo-Inc/agent-plugin";
 const PLUGIN_NAME = "oqoqo";
 const MARKETPLACE_NAME = "oqoqo";
 const PRODUCTION_MCP_URL = "https://mcp.oqoqo.ai/mcp";
-const SKILL_NAMES = [
+export const SKILL_NAMES = [
   "product-eval-authoring",
+  "product-eval-results",
   "product-eval-setup",
   "product-eval-tasks",
 ];
+const SKILL_FIELDS = new Set([
+  "name",
+  "description",
+  "license",
+  "compatibility",
+  "metadata",
+  "allowed-tools",
+]);
 const SKILL_ROOTS = [
   "skills",
   "plugins/oqoqo/skills",
@@ -246,11 +255,30 @@ async function validateSkills(root) {
         readFile(resolve(root, skillRoot, skillName, "SKILL.md"), "utf8"),
       ),
     );
-    assert.match(
-      contents[0],
-      new RegExp(`^---\\nname: ${skillName}\\ndescription: \\S`),
-      `${skillName} has invalid frontmatter`,
+    // https://agentskills.io/specification. Only its fields work on every
+    // client: claude.ai upload and the Skills API refuse any other key.
+    const [, frontmatter, body] =
+      /^---\n([\s\S]*?)\n---\n([\s\S]*)$/.exec(contents[0]) ?? [];
+    assert.ok(frontmatter, `${skillName} has no frontmatter`);
+    const fields = Object.fromEntries(
+      frontmatter.split("\n").map((line) => line.split(/: (.*)/s, 2)),
     );
+    assert.deepEqual(
+      Object.keys(fields).filter((field) => !SKILL_FIELDS.has(field)),
+      [],
+      `${skillName} has a field outside the specification`,
+    );
+    assert.equal(fields.name, skillName, `${skillName} names its directory`);
+    assert.match(skillName, /^[a-z0-9]+(-[a-z0-9]+)*$/);
+    // OpenAI limits `plugin:skill` to 64 characters.
+    assert.ok(`${PLUGIN_NAME}:${skillName}`.length <= 64, skillName);
+    assert.ok(
+      (fields.description?.length ?? 0) <= 1024 &&
+        /Use when /.test(fields.description ?? "") &&
+        !/[<>]/.test(fields.description),
+      `${skillName} description says when to use it, in 1024 characters`,
+    );
+    assert.ok(body.split("\n").length < 500, `${skillName} body is too long`);
     assert.ok(
       contents.every((content) => content === contents[0]),
       `${skillName} drifted between public packages`,

@@ -10,6 +10,7 @@ job, from the first question to the last thing you tell them to do.
 
 Two other skills cover the craft. Use `product-eval-tasks` for writing the tasks
 and the rubrics. Use `product-eval-setup` for the machine and the seeded data.
+Use `product-eval-results` to launch the set and read what comes back.
 For general guidance on how Oqoqo works, start with the public documentation
 index at `https://docs.oqoqo.ai/llms.txt`, then read the pages relevant to the
 workflow. Do not assume that a separate documentation MCP server is connected.
@@ -138,6 +139,10 @@ the returned payload schema. The product docs explain the workflow, but the
 exact shapes come from these schemas. Do not infer write shapes from catalog
 resources or probe the contract with failed writes.
 
+Call `inspect_catalog` first. It lists what the project already has, including
+the standard machine a knowledge task can use, with the IDs, short keys and
+`expectedUpdatedAt` values that later writes need.
+
 Use the order below. A task refers to its machine and its files by ID, and a
 treatment refers to its tools by version ID, so nothing can be written before
 the thing it points at.
@@ -181,29 +186,34 @@ criteria are numbered from 1. Each criterion is one plain sentence.
 When you update something that already exists, prefer its short key, e.g.,
 `task_08`, as `targetKey`. CLI and SDK updates may use their matching public ID
 as `targetKey`; Oqoqo normalizes it to the short key. For every other resource
-kind, including Tasks, use the short key. A public ID for those kinds is invalid
-input, not a revision conflict. Use the current `expectedUpdatedAt` value. A
-Task update also needs its current `version` and `versionId`.
+kind, including Tasks, use the short key. A public ID there fails as invalid
+input. That does not mean that someone else changed the resource, so do not
+read it again and retry with the same ID. Send `updatedAt` from
+`inspect_catalog` with projection `full` as `expectedUpdatedAt`. A Task update
+also needs its current `version` and `versionId`.
 
 Editing a tool mints a new version ID, and a treatment keeps pointing at the
 old one. So any change to a skill, MCP server, CLI or SDK after the treatments
-exist means updating every treatment that carries it. Get the credential
-declarations right in step 3 and you avoid the round trip.
+exist means updating every treatment that carries it. Call `manage_resource`
+with action `update_members_to_current` on each such treatment to move it to
+the current version of every tool it carries. Get the credential declarations
+right in step 3 and you avoid the round trip.
 
 ## Hand it over
 
-Call `get_setup_links` and give them the exact link for each connection or secret
-they have to finish, e.g., the machines page for a machine variable, and the MCP
-page for OAuth or a secret header.
-
 Call `preflight_experiment`. It checks the plan, the secrets and the quota
-without spending a run. Expect it to report a missing MCP header or OAuth
-connection, because that is the one thing you could not do for them.
+without spending a run. Expect it to report every MCP header, OAuth connection
+and required variable that has no value yet, because those are the things you
+could not do for them. Each issue it reports carries the `setupUrl` of the
+page where that value goes.
 
-Preflight does not report a missing CLI or SDK variable, even one you declared
-as required. It can come back ready while the key a live interaction task
-depends on is still empty. So list those keys yourself, with the page each is
-entered on, and say plainly that preflight will not flag them.
+Give them the exact link for each connection or secret they have to finish.
+Use the `setupUrl` from preflight or from the write that created the resource.
+`get_setup_links` gives the general page for each kind, e.g., the machines page.
+
+Preflight does not check a CLI or SDK variable that was declared without
+`required: true`. List any such key yourself, with the page it is entered on,
+and say that preflight will not flag it.
 
 Then tell them what to do next:
 
@@ -215,3 +225,6 @@ Then tell them what to do next:
 Let them pick `maxParallelAgentSessions` themselves. The default suits most
 batches. Suggest 1 only when concurrent runs share mutable data and cannot be
 given separate targets.
+
+If they ask you to launch it, or to read the results when it finishes, use
+`product-eval-results`.

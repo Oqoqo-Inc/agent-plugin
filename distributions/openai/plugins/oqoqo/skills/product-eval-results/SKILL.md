@@ -1,0 +1,158 @@
+---
+name: product-eval-results
+description: Launch an Oqoqo eval experiment, follow it to the end, and turn its runs, Evals verdicts, trajectories and frictions into conclusions that hold up. Use when someone asks to launch or rerun an experiment, check on one, compare treatments (toolsets), explain why runs passed or failed, say whether agents used a tool, find frictions, or count anything across runs.
+---
+
+# Run an eval and read its results
+
+An experiment is cheap to misread. Results arrive in stages, a pass rate can
+rest on two runs, and a treatment can look better without the agent ever using
+it. This skill covers the run from launch to a conclusion you can defend.
+
+If a term such as pass rate, lift or trial is unclear, read
+`https://docs.oqoqo.ai/evaluation/runs-and-trials`. For when Evals and
+Insights results are final, read
+`https://docs.oqoqo.ai/evaluation/evals-and-insights`.
+
+## Launch once, and only once
+
+Every launch spends runs. The count is tasks multiplied by treatments,
+multiplied by agents, multiplied by trials. Say that number before you launch,
+and launch with at least two trials.
+
+To run an earlier experiment again, call `get_experiment_plan` for it. It gives
+back a plan you can launch as it is, with the task versions the experiment used
+or the latest ones. To build a new plan, take the IDs from `inspect_catalog`.
+Read the agents with `kinds` set to agent and `projection` `full`: each agent's
+`facts` holds the configuration revisions the plan needs.
+
+Call `preflight_experiment` with the plan before you launch it. It spends
+nothing, and it returns the plan it checked. Fix every blocker it reports, then
+launch the plan it returned.
+
+- `configuration_changed` means an agent setting changed after the plan was
+  made. Follow its message and preflight again. Sending the same plan again
+  fails the same way.
+- A missing MCP header, OAuth connection or required variable needs a
+  person. Give them the `setupUrl` that the issue carries.
+
+Give `launch_experiment` a `launchAttemptId` that you keep for this launch. If
+the call times out or you cannot tell whether it worked, send the same plan
+with the same ID. Oqoqo returns the launch it already made. A new ID starts a
+second experiment and spends the runs again.
+
+Let the person choose `maxParallelAgentSessions`.
+
+## Follow it to the end
+
+Follow `get_launch_status` until the experiment exists, then
+`get_experiment_status`. Send `wait_ms` (up to 25000) and call again at once:
+each call waits until the status changes or a run finishes, so you do not
+need to sleep between calls.
+
+Read the final run list after a status call returns `terminal` true. Do not
+send `list_runs` in parallel with a waiting status call. `list_runs` returns
+first, so it can show a run as still running while the status call, which
+returns later, shows the experiment finished.
+
+A finished experiment can still have results on the way. Evals and Insights
+read each run after it ends, so verdicts and frictions arrive later.
+
+- `get_evals_results` and `get_insights_results` read one attempt. Leave out
+  its ID to read the latest attempt. Send the ID that the result names when
+  you page on with a cursor or an offset. Send `wait_ms` to wait in the call
+  while the attempt is still running. A row with status `queued` or `running`
+  has no result yet. `completed` is final. `skipped` or `failed` means that
+  attempt gives the run no result.
+- `analyze_results` counts `pendingRuns`. A pass rate with pending runs is not
+  final. An empty list of frictions is final only when Insights has no pending
+  runs.
+
+Say what is still pending in every report. Do not wait in a loop for results
+that nobody asked you to wait for.
+
+## Pick the read that answers the question
+
+Start from the question, not from the tool list. Each read below names the
+next one to go to when you need more detail.
+
+| Question | Start with | Go deeper with |
+|---|---|---|
+| Which treatment did better? | `analyze_results`, mode `compare_treatments` | `list_runs` filtered to one treatment |
+| Why did this run pass or fail? | `get_evals_results` for its verdict and `outcomeExplanation` | `analyze_results`, mode `get_run_evidence`, then `get_run_trajectory` around the steps it cites |
+| Did the agent use the tool? | `get_run_profile`, or `treatmentUse` in `list_runs` | `get_run_trajectory` from the first step that used it |
+| Where do agents get stuck? | `analyze_results`, mode `search_frictions` or `rank_tasks_by_friction` | `get_insights_results` for one run |
+| What failed the same way? | `analyze_results`, mode `find_failure_patterns` or `find_similar_failures` | `analyze_results`, mode `get_run_evidence`, for each run it names |
+| How many, how much, or how often? | `query_data`, after `inspect_data_model` | a narrower filter or another `groupBy` |
+| What did the agent leave behind? | `get_run_output`, part `manifest` | the diff or one file |
+
+Read small parts of a run. Start `get_run_trajectory` just before the step
+you need, with a small `limit` and the compact projection. Open
+`get_run_transcript` only for the original text of a step you already found.
+
+## Count with `query_data`
+
+Call `inspect_data_model` once, and choose the dataset by its grain. `runs`
+has one row for each logical run, and `trials` has one row for each repeat of
+it. Counting runs in `trials` counts every trial.
+
+Answer a count or a breakdown with an aggregate, so the answer fits on one
+page. For a breakdown, put each field in both `select` and `groupBy`, and add
+an aggregate such as `{"function": "count", "as": "runs"}`.
+
+When a query fails, read the error before you change anything. Fix the one
+thing it names and send the query again.
+
+Never present one page as the whole result. When `page.hasMore` is true, say
+that more rows exist, and read the next page only when the question needs
+every row.
+
+## Compare treatments fairly
+
+`compare_treatments` measures each treatment against the reference treatment,
+which is normally the baseline. Read these before you call a difference real.
+
+- **Count the runs behind every rate.** A failure rate counts only runs with
+  a verdict. Runs whose Evals failed, runs the environment blocked,
+  inconclusive runs and pending runs stay out. Report those counts too. With
+  two trials of a task, one run moves that task's rate by 50 points.
+- **Check that the tool was used.** `treatmentUse.useRate` says how often the
+  agent used the treatment, counted over runs where use can be decided. A
+  difference on runs that never used the tool did not come from the tool.
+  `not_measured` and `inconclusive` mean the log cannot show use. They do not
+  mean the tool went unused.
+- **Look at each task.** A treatment can help overall and hurt one task.
+  Check the tasks behind the totals before you recommend it.
+- **Compare cost only within one source.** A cost the agent reported and a
+  cost estimated from list prices are not comparable. The delta stays null
+  when the two sources differ.
+- **Name the agent completely.** Runs with the same agent, model and effort
+  can still differ by provider connection, shown as `providerDisplayName`.
+
+Say plainly when the experiment is too small to decide, and say how many more
+trials would help.
+
+## Explain a result with evidence
+
+Start from the verdict. `outcomeExplanation` says which rule decided the run
+and how each criterion counted. Then find the steps that show why.
+
+Check `evidenceCoverage` before you blame the agent. When the judge could not
+read the whole run, the verdict covers only what it read. Say so.
+
+A failed criterion is not always the agent's fault. If the work met the intent
+of the task and the criterion asked for something else, the rubric is wrong.
+Fix the rubric on the task, check the change with `preview_evals`, then run
+Evals again with `trigger_evals`. That grades the same recorded work again,
+and no new runs are needed.
+
+A run that the environment blocked, or that failed before the agent answered,
+says nothing about the agent. For a custom agent, `agentError` says where it
+stopped.
+
+## Write the report
+
+Every number in the report comes from a tool result in this session. Give the
+public IDs of the experiment, the runs and the trials you cite, and the step
+ordinals of the steps you quote. Say what is still pending, what was too small
+to decide, and what you would read next.

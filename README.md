@@ -39,7 +39,7 @@ copilot plugin install oqoqo@oqoqo
 
 ## Agent skills
 
-Install all Oqoqo eval authoring skills with the Skills CLI:
+Install all Oqoqo eval skills with the Skills CLI:
 
 ```bash
 npx skills add Oqoqo-Inc/agent-plugin --skill '*'
