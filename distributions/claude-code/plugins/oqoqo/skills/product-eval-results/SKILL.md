@@ -81,7 +81,7 @@ next one to go to when you need more detail.
 | Which treatment did better? | `analyze_results`, mode `compare_treatments` | `list_runs` filtered to one treatment |
 | Why did this run pass or fail? | `get_evals_results` for its verdict and `outcomeExplanation` | `analyze_results`, mode `get_run_evidence`, then `get_run_trajectory` around the steps it cites |
 | Did the agent use the tool? | `get_run_profile`, or `treatmentUse` in `list_runs` | `get_run_trajectory` from the first step that used it |
-| Where do agents get stuck? | `analyze_results`, mode `search_frictions` or `rank_tasks_by_friction` | `get_insights_results` for one run |
+| Where do agents get stuck? | `list_frictions`, ranked by runs the agent never got past | `get_friction` for one friction, then `list_runs` with its `friction_id` |
 | What failed the same way? | `analyze_results`, mode `find_failure_patterns` or `find_similar_failures` | `analyze_results`, mode `get_run_evidence`, for each run it names |
 | How many, how much, or how often? | `query_data`, after `inspect_data_model` | a narrower filter or another `groupBy` |
 | What did the agent leave behind? | `get_run_output`, part `manifest` | the diff or one file |
