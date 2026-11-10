@@ -1,6 +1,6 @@
 {
   "name": "oqoqo",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Operate and analyze Oqoqo projects and eval experiments from your agent.",
   "author": {
     "name": "Oqoqo",
@@ -98,7 +98,7 @@
         }
       },
       "publication": {
-        "release_notes": "Version 1.3.2 updates the product-eval-results skill for schedules. Before it creates or changes a schedule, it now calls preview_schedule and tells the person the next launches, the runs each launch uses, and about how many the next 30 days use. It asks for an IANA time zone such as America/New_York instead of an abbreviation. The package still declares only the authenticated Oqoqo product MCP, with the same four guided product-eval skills. Credentials stay outside the package in the secure review form."
+        "release_notes": "Version 1.3.3 updates the product-eval-results skill for frictions. When it reports a friction, it now leads with where the team can fix it (Product, Custom agent, Setup, or Agent behavior) and the place the fix names, then where the friction happens most, before its counts. It can narrow list_frictions to one place with fix_in. The package still declares only the authenticated Oqoqo product MCP, with the same four guided product-eval skills. Credentials stay outside the package in the secure review form."
       }
     }
   }
