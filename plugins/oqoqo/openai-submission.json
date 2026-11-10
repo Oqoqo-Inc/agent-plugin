@@ -10,7 +10,7 @@
     "Show the Oqoqo project context for this request.",
     "List the latest experiments in this Oqoqo project and summarize their status."
   ],
-  "releaseNotes": "Version 1.3.1 updates the product-eval-results skill for frictions. To find where agents get stuck, it now uses list_frictions, which ranks frictions by the runs that the agent never got past. To read one friction, it uses get_friction, then list_runs with that friction_id. The package still declares only the authenticated Oqoqo product MCP, with the same four guided product-eval skills. Credentials stay outside the package in the secure review form.",
+  "releaseNotes": "Version 1.3.2 updates the product-eval-results skill for schedules. Before it creates or changes a schedule, it now calls preview_schedule and tells the person the next launches, the runs each launch uses, and about how many the next 30 days use. It asks for an IANA time zone such as America/New_York instead of an abbreviation. The package still declares only the authenticated Oqoqo product MCP, with the same four guided product-eval skills. Credentials stay outside the package in the secure review form.",
   "positiveTestCases": [
     {
       "name": "Read identity",

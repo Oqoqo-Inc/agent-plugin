@@ -20,9 +20,37 @@ Every launch spends runs. The count is tasks multiplied by treatments,
 multiplied by agents, multiplied by trials. Say that number before you launch,
 and launch with at least two trials.
 
-To run an earlier experiment again, call `get_experiment_plan` for it. It gives
-back a plan you can launch as it is, with the task versions the experiment used
-or the latest ones. To build a new plan, take the IDs from `inspect_catalog`.
+To run a finished experiment again as it is, call `rerun_experiment` with its
+`experiment_id` and a `launch_attempt_id` you keep. Choose the latest task
+versions or the experiment's own with `version_mode`. To change something
+first, call `get_experiment_plan`, edit the plan, then preflight and launch it.
+To build a new plan, take the IDs from `inspect_catalog`.
+
+To run it on a cadence, create a schedule with `manage_schedule`: `action`
+`create`, a finished `experiment_id`, a `cron` whose minute is 0, 15, 30 or 45,
+and an IANA `time_zone` such as America/New_York. An abbreviation such as EST
+is refused, so ask the person for their city. Each launch uses the project's
+tasks, treatments, and agents as they are then. Before you create it, call
+`preview_schedule` with the same `experiment_id`, `cron`, and `time_zone`, and
+tell the person its `nextLaunches`, `runsPerLaunch`, and `runsPer30Days`.
+`runsPer30Days` is the runs in the next 30 days, not a monthly average. It
+counts the schedule while active (as if resumed, for a paused schedule), and it
+is 0 when no launch falls in the next 30 days. If it returns a `shortfall`,
+the organization's runs won't cover every launch: tell the person its
+`message` and `action` link. It is a warning, so the create still works. If it
+returns a `blocker`, the create refuses with that message; give the person its
+fix link instead. To preview a change, pass `schedule_id` and only the fields you
+would change. A schedule runs as the person who created it, resumed it, or
+last changed when or what it runs. Oqoqo pauses it when a launch needs a fix
+or after 3 failed launches in a row, and `pauseReason` says why. A launch is
+skipped while the schedule's previous experiment still runs; `skippedInARow`
+counts them, and from 3 the schedule repeats faster than its experiment
+finishes, so suggest a less frequent `cron`. Launch it now with
+`rerun_experiment` and its `schedule_id`. List what it launched with
+`list_experiments` and its `schedule_id`. Find the schedule that launched an
+experiment with `list_schedules` and `launched_experiment_id`, and the
+schedules an experiment already has with `experiment_id`, before you create
+another.
 Read the agents with `kinds` set to agent and `projection` `full`: each agent's
 `facts` holds the configuration revisions the plan needs.
 
