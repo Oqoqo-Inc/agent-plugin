@@ -210,6 +210,8 @@ page where that value goes.
 Give them the exact link for each connection or secret they have to finish.
 Use the `setupUrl` from preflight or from the write that created the resource.
 `get_setup_links` gives the general page for each kind, e.g., the machines page.
+Its `issues` list every Machine and tool in the project that still needs a
+required value or the person's account connection, each with its `setupUrl`.
 
 Preflight does not check a CLI or SDK variable that was declared without
 `required: true`. List any such key yourself, with the page it is entered on,
