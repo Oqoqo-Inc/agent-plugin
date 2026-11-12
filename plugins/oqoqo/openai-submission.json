@@ -10,7 +10,7 @@
     "Show the Oqoqo project context for this request.",
     "List the latest experiments in this Oqoqo project and summarize their status."
   ],
-  "releaseNotes": "Version 1.3.4 updates the product-eval-authoring skill for setup. get_setup_links now returns issues: every Machine and tool in the project that still needs a required value or the person's account connection, each with its setupUrl. The skill uses that list to give the person the exact link for each value they have to finish. The package still declares only the authenticated Oqoqo product MCP, with the same four guided product-eval skills. Credentials stay outside the package in the secure review form.",
+  "releaseNotes": "Version 1.3.5 keeps the guided product-eval skills in one project and one organization. The skills read get_project_context once and pass its project_id on every project-scoped call, because MCP has no current project. The product-eval-results skill now sends expected_organization_id on every launch, rerun and schedule change, and links the current documentation pages. The package still declares only the authenticated Oqoqo product MCP, with the same four guided product-eval skills. Credentials stay outside the package in the secure review form.",
   "positiveTestCases": [
     {
       "name": "Read identity",

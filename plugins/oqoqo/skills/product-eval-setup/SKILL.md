@@ -37,7 +37,8 @@ of three ways. Work out which one applies before you create the tool.
    and cannot collide with the others.
 2. A person connects OAuth or enters a key afterwards. You declare the required
    input on the tool, create the tool anyway, and tell them it is waiting on
-   them. Call `get_setup_links` and hand over the link for the page they need.
+   them. Call `get_setup_links` with the `project_id` from `get_project_context`,
+   and hand over the link for the page they need.
 
    Declare it by name only. For a remote MCP server, use `auth: "oauth"` for
    OAuth or `headerNames` for static headers. For a local MCP server, use

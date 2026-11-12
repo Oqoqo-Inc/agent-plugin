@@ -35,8 +35,15 @@ use that scope. Otherwise say that you will cover the product broadly across
 its documented user jobs and every task kind it supports. Broad coverage is the
 default.
 
-Call `get_project_context` for the project. If there is more than one and nobody
-says which, use the one that is already active. Keep its `organization.id`:
+Call `get_project_context` once, before any other Oqoqo call. MCP has no
+current project. A project-scoped call without `project_id` lets the server
+pick a project for that call only, so two calls can land in different projects.
+Choose the project from its `projects` list. If there is more than one and
+nobody says which, ask which one, say that you will use the one it returns as
+`project`, and keep working. Pass that `projectId` as `project_id` on every
+project-scoped call, and every CLI command passes it as `--project-id`.
+
+Keep its `organization.id`:
 every write you make passes it as `expected_organization_id`, and every CLI
 command passes it as `--expected-organization-id`. Another session can sign in
 again and move the shared sign-in to another organization. Then the write fails

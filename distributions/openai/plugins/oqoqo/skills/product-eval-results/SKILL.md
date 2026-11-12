@@ -10,9 +10,29 @@ rest on two runs, and a treatment can look better without the agent ever using
 it. This skill covers the run from launch to a conclusion you can defend.
 
 If a term such as pass rate, lift or trial is unclear, read
-`https://docs.oqoqo.ai/evaluation/runs-and-trials`. For when Evals and
-Insights results are final, read
-`https://docs.oqoqo.ai/evaluation/evals-and-insights`.
+`https://docs.oqoqo.ai/evaluation/results`. For when Evals and Insights
+results are final, read `https://docs.oqoqo.ai/evaluation/evals#pending-verdicts`
+and `https://docs.oqoqo.ai/evaluation/insights#pending-frictions`.
+
+## Stay in one project and one organization
+
+Call `get_project_context` once, before any other Oqoqo call. MCP has no
+current project. A project-scoped call without `project_id` lets the server
+pick a project for that call only, so two calls can read or launch in
+different projects. Choose the project from its `projects` list. If there is
+more than one and nobody says which, ask which one, say that you will use the
+one it returns as `project`, and keep working. Pass that `projectId` as
+`project_id` on every project-scoped call, and every CLI command passes it as
+`--project-id`.
+
+Keep its `organization.id`. Every write, including a launch, a rerun, a
+schedule change and a new Evals attempt, passes it as
+`expected_organization_id`, and every CLI command passes it as
+`--expected-organization-id`. Another session can sign in again and move the
+shared sign-in to another organization. Then the write fails with
+`organization_scope_changed` and changes nothing, instead of spending runs in
+the wrong organization. Tell the person, and read the context again before you
+continue.
 
 ## Launch once, and only once
 
