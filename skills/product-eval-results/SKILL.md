@@ -57,12 +57,16 @@ tell the person its `nextLaunches`, `runsPerLaunch`, and `runsPer30Days`.
 counts the schedule while active (as if resumed, for a paused schedule), and it
 is 0 when no launch falls in the next 30 days. If it returns a `shortfall`,
 the organization's runs won't cover every launch: tell the person its
-`message` and `action` link. It is a warning, so the create still works. If it
-returns a `blocker`, the create refuses with that message; give the person its
-fix link instead. To preview a change, pass `schedule_id` and only the fields you
+`message` and `action` link. It is a warning, so the create still works. If
+`blockers` is not empty, the create refuses with all of them; give the person
+every fix link at once instead. To preview a change, pass `schedule_id` and only the fields you
 would change. A schedule runs as the person who created it, resumed it, or
 last changed when or what it runs. Oqoqo pauses it when a launch needs a fix
-or after 3 failed launches in a row, and `pauseReason` says why. A launch is
+or after 3 failed launches in a row, and `pauseReason` says why. Give the
+person its fix link; once they fix it, `resume` is the one step: it checks the
+launch and resumes. If something still stops it, `resume` refuses with
+`schedule_launch_blocked` and every blocker with its fix link in
+`details.blockers`. A launch is
 skipped while the schedule's previous experiment still runs; `skippedInARow`
 counts them, and from 3 the schedule repeats faster than its experiment
 finishes, so suggest a less frequent `cron`. Launch it now with
@@ -83,6 +87,12 @@ launch the plan it returned.
   fails the same way.
 - A missing MCP header, OAuth connection or required variable needs a
   person. Give them the `setupUrl` that the issue carries.
+- `mcp_header_values_unbound` means an MCP server version would send its
+  saved header values to an address that no person bound them to, for
+  example a version you saved at a new URL. Only a person can fix it. Give
+  them the blocker's `setupUrl`, the version's Tools tab, where they check
+  the address and select Refresh. Do not change the URL back or launch again
+  before they do.
 
 Give `launch_experiment` a `launchAttemptId` that you keep for this launch. If
 the call times out or you cannot tell whether it worked, send the same plan

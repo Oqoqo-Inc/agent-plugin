@@ -212,7 +212,10 @@ Call `preflight_experiment`. It checks the plan, the secrets and the quota
 without spending a run. Expect it to report every MCP header, OAuth connection
 and required variable that has no value yet, because those are the things you
 could not do for them. Each issue it reports carries the `setupUrl` of the
-page where that value goes.
+page where that value goes. If you saved an MCP server at a new URL, and it
+already has saved header values, expect the blocker
+`mcp_header_values_unbound`: a person checks the new address on the version's
+Tools tab (its `setupUrl`) and selects Refresh.
 
 Give them the exact link for each connection or secret they have to finish.
 Use the `setupUrl` from preflight or from the write that created the resource.
