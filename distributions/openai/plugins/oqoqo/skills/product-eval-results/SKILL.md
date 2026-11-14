@@ -136,14 +136,46 @@ next one to go to when you need more detail.
 
 | Question | Start with | Go deeper with |
 |---|---|---|
+| What did the experiment show, or why did a treatment or an agent do worse? | `get_experiment_brief` | `get_evals_comparisons` for every comparison, then `get_friction` for one friction's evidence |
 | Which treatment did better? | `analyze_results`, mode `compare_treatments` | `list_runs` filtered to one treatment |
-| Is a difference real, or chance? | `get_evals_comparisons` | `get_experiment_plan` with the comparison's `comparison_id`, to plan the runs that confirm it |
+| Does a difference hold up? | `get_evals_comparisons` | `get_experiment_plan` with the comparison's `comparison_id`, to plan the runs that check it again |
 | Why did this run pass or fail? | `get_evals_results` for its verdict and `outcomeExplanation` | `analyze_results`, mode `get_run_evidence`, then `get_run_trajectory` around the steps it cites |
 | Did the agent use the tool? | `get_run_profile`, or `treatmentUse` in `list_runs` | `get_run_trajectory` from the first step that used it |
 | Where do agents get stuck? | `list_frictions`, ranked by runs the agent never got past; `fix_in` narrows to where the team can fix it | `get_friction` for one friction, then `list_runs` with its `friction_id` |
 | What failed the same way? | `analyze_results`, mode `find_failure_patterns` or `find_similar_failures` | `analyze_results`, mode `get_run_evidence`, for each run it names |
 | How many, how much, or how often? | `query_data`, after `inspect_data_model` | a narrower filter or another `groupBy` |
 | What did the agent leave behind? | `get_run_output`, part `manifest` | the diff or one file |
+
+Read the Brief first when someone asks what an experiment showed, or why a
+treatment or an agent did worse. `get_experiment_brief` returns
+`answerHeadline`, the first answer of the experiment's comparisons, and at
+most 5 `findings`: the main comparisons with a clear or likely difference,
+then clear differences for one agent alone or between agents. Each finding
+has its answer in the words the dashboard shows (`headline`, `sides`,
+`verdict`, `nextStep`), one written `sentence`, and the frictions seen with
+`worseSide`, counted for both sides. Say the `headline` and the `verdict` as
+written. Such a friction was seen with the side that did worse. That does
+not mean it caused the difference: say "seen with", never "because",
+and give both sides' counts as the tool returns them. Add no number and no reason of your own. When
+`comparisonsLeftOut` or `frictionsLeftOut` is above 0, say that the Brief
+does not show everything.
+
+- `writing`: the findings are there and the Brief is being written. Call
+  again after `waitMs` milliseconds until `state` changes.
+- `failed` and `not_written`: the findings are there with no written
+  `sentence`. Say what `message` says, and `error.message` when it failed.
+  Do not tell the person to run Evals or Insights again for it: a Brief is
+  written the next time either finishes. Report the findings' counts, and
+  read `get_evals_comparisons` and `list_frictions` for the rest.
+- `no_insights`: there is no Brief. Say what `message` says, and answer from
+  `get_evals_comparisons`. The frictions tools have nothing until Insights
+  reviews a run.
+- `not_available`: the experiment, its Evals or its Insights is still
+  running. Read the Brief when they finish.
+
+A `likely` finding carries the same `confirmation` as its comparison. Follow
+"Compare treatments fairly" below, and launch nothing until the person says
+to go ahead.
 
 When you report a friction, lead with where the team can fix it (`fixIn`:
 `product` Product, `agent` Custom agent, `setup` Setup, or `agent_behavior`
@@ -194,30 +226,56 @@ which is normally the baseline. Read these before you call a difference real.
 - **Look at each task.** A treatment can help overall and hurt one task.
   Check the tasks behind the totals before you recommend it.
 - **Check whether the difference holds.** `get_evals_comparisons` compares
-  each treatment with the baseline, and each pair of agents, task by task.
-  Each comparison has a label: `clear` holds after allowing for every
-  comparison in the experiment, `likely` stands out on its own but can still
-  be chance in an experiment with many comparisons, and `unclear` means these
-  runs cannot tell the two apart. `unclear` never means the two are the same.
-  Report the label with its task split, not a rate alone. For a `likely`
-  difference, give `pValue` and `adjustedPValue` together, and do not call it
-  significant. Read `notes`: they say when the experiment is too small,
-  still running, or read from an earlier Evals attempt.
+  each treatment with the baseline, and each pair of agents, on the same
+  tasks. Start with `answers`: the answers to the experiment's question, in
+  the order to say them. They are the main comparisons first, whatever
+  their result, then a comparison for one agent alone or between agents
+  only when its difference is `clear`. Lead with a main comparison. A
+  `likely` result for one agent alone or between agents is never an answer:
+  it is in `comparisons`, and `restLine` counts it. Each answer has a
+  `headline` (who did better, and on how many tasks), `sides` (each side's
+  passes, runs and whole `percent`, the side that did better first), a
+  `verdict` (the result label), a `nextStep`, and `byAgent` (how many agents
+  did better with the same side). Say the `headline` and the `verdict` as
+  written, and do not reword a result. `restLine` says what the answers
+  leave out. `comparisons` lists every comparison with the same fields, its
+  `groupLabel` and its `taskSplit`.
+- **Read the label.** `clear` means one side did better on enough tasks to
+  be confident, `likely` means one side is ahead but more runs are needed to
+  be sure, and `unclear` means neither side is reliably ahead on these
+  tasks. `unclear` never means the two are the same.
+  `family` says which comparisons a result was checked with: `primary` is
+  the main comparisons, which answer the experiment's question, and
+  `breakdown` is every other one (each agent on its own, agents against each
+  other, and whether a treatment helps one agent more). The breakdowns are
+  checked more strictly because there are more of them, so the same result
+  can be `clear` for all agents together and `likely` for one agent. Call
+  them main comparisons and breakdowns when you speak. Give `pValue` and
+  `adjustedPValue` together, and do not call a result significant. Only
+  tasks where one side did better count. With fewer than 6 tasks no
+  comparison can show a difference: say that, and suggest more tasks. Read
+  `notes`: they say when the experiment is too small, still running, or read
+  from an earlier Evals attempt.
 - **Compare cost only within one source.** A cost the agent reported and a
   cost estimated from list prices are not comparable. The delta stays null
   when the two sources differ.
 - **Name the agent completely.** Runs with the same agent, model and effort
   can still differ by provider connection, shown as `providerDisplayName`.
 
-Say plainly when the experiment is too small to decide. A `likely` difference
-from the latest Evals of a finished experiment comes with a `confirmation`: the
-treatments, agents, and runs that have a fair chance to settle it. To run it,
+Say plainly when the experiment is too small to decide. `nextStep` says what
+to do next: `run_again` with its run count, `more_tasks` when these tasks
+cannot show or settle a difference, or null. A `likely` difference from the
+latest Evals of a finished experiment comes with a `confirmation`: the runs
+that check it again and are likely to settle it. To run it again,
 call `get_experiment_plan` with the experiment and that comparison's
 `comparison_id`, then preflight and launch the plan it returns. Say its run
-count first. When `confirmation` is null, `confirmationUnavailable` says why:
-read the latest Evals, wait for the experiment to finish, or add tasks.
-Launch one confirmation. If it comes back `likely` again, report it with both
-p-values, and ask before launching another.
+count first: a launch spends runs. When `confirmation` is null,
+`confirmationUnavailable` says why: read the latest Evals, wait for the
+experiment to finish, or add tasks, because running the same tasks again
+cannot settle it. Run it again once. If it comes back `likely` again, report
+it with both p-values, and ask before launching another. Do not promise that
+the same result will come out `clear`: a difference in how much a treatment
+helps each agent can stay `likely` when it is run again.
 
 ## Explain a result with evidence
 
