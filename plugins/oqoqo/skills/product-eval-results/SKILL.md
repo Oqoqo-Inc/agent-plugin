@@ -137,6 +137,7 @@ next one to go to when you need more detail.
 | Question | Start with | Go deeper with |
 |---|---|---|
 | Which treatment did better? | `analyze_results`, mode `compare_treatments` | `list_runs` filtered to one treatment |
+| Is a difference real, or chance? | `get_evals_comparisons` | `get_experiment_plan` with the comparison's `comparison_id`, to plan the runs that confirm it |
 | Why did this run pass or fail? | `get_evals_results` for its verdict and `outcomeExplanation` | `analyze_results`, mode `get_run_evidence`, then `get_run_trajectory` around the steps it cites |
 | Did the agent use the tool? | `get_run_profile`, or `treatmentUse` in `list_runs` | `get_run_trajectory` from the first step that used it |
 | Where do agents get stuck? | `list_frictions`, ranked by runs the agent never got past; `fix_in` narrows to where the team can fix it | `get_friction` for one friction, then `list_runs` with its `friction_id` |
@@ -192,14 +193,31 @@ which is normally the baseline. Read these before you call a difference real.
   mean the tool went unused.
 - **Look at each task.** A treatment can help overall and hurt one task.
   Check the tasks behind the totals before you recommend it.
+- **Check whether the difference holds.** `get_evals_comparisons` compares
+  each treatment with the baseline, and each pair of agents, task by task.
+  Each comparison has a label: `clear` holds after allowing for every
+  comparison in the experiment, `likely` stands out on its own but can still
+  be chance in an experiment with many comparisons, and `unclear` means these
+  runs cannot tell the two apart. `unclear` never means the two are the same.
+  Report the label with its task split, not a rate alone. For a `likely`
+  difference, give `pValue` and `adjustedPValue` together, and do not call it
+  significant. Read `notes`: they say when the experiment is too small,
+  still running, or read from an earlier Evals attempt.
 - **Compare cost only within one source.** A cost the agent reported and a
   cost estimated from list prices are not comparable. The delta stays null
   when the two sources differ.
 - **Name the agent completely.** Runs with the same agent, model and effort
   can still differ by provider connection, shown as `providerDisplayName`.
 
-Say plainly when the experiment is too small to decide, and say how many more
-trials would help.
+Say plainly when the experiment is too small to decide. A `likely` difference
+from the latest Evals of a finished experiment comes with a `confirmation`: the
+treatments, agents, and runs that have a fair chance to settle it. To run it,
+call `get_experiment_plan` with the experiment and that comparison's
+`comparison_id`, then preflight and launch the plan it returns. Say its run
+count first. When `confirmation` is null, `confirmationUnavailable` says why:
+read the latest Evals, wait for the experiment to finish, or add tasks.
+Launch one confirmation. If it comes back `likely` again, report it with both
+p-values, and ask before launching another.
 
 ## Explain a result with evidence
 

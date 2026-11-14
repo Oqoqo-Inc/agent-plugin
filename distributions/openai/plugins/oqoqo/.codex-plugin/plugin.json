@@ -1,6 +1,6 @@
 {
   "name": "oqoqo",
-  "version": "1.3.8",
+  "version": "1.3.9",
   "description": "Operate and analyze Oqoqo projects and eval experiments from your agent.",
   "author": {
     "name": "Oqoqo",
@@ -98,7 +98,7 @@
         }
       },
       "publication": {
-        "release_notes": "Version 1.3.8 corrects how the product-eval-setup skill refers to a declared value: write ${NAME} in a setup or post-install command and in an MCP server's url, command, or args. Install commands can't use Variables. The tool input descriptions say the same. The package still declares only the authenticated Oqoqo product MCP, with the same four guided product-eval skills. Credentials stay outside the package in the secure review form."
+        "release_notes": "Version 1.3.9 adds one read-only tool, get_evals_comparisons, which says which differences between an experiment's treatments and agents hold up, from its Evals verdicts, with no model. get_experiment_plan gains an optional comparison_id that plans the runs that confirm a likely difference. The product-eval-results skill checks whether a difference holds before it calls a treatment better or worse. The package still declares only the authenticated Oqoqo product MCP, with the same four guided product-eval skills. Credentials stay outside the package in the secure review form."
       }
     }
   }
