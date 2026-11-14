@@ -45,8 +45,10 @@ of three ways. Work out which one applies before you create the tool.
    `envNames`. On a CLI or SDK, use
    `variables: [{name: "THE_NAME", required: true}]`. Do not send a value of any
    kind. A `value` field and a `secret: true` flag are refused, because secure
-   values are entered in the web app and nowhere else. Where a command or URL
-   needs the value, write the declared name as `{{THE_NAME}}`.
+   values are entered in the web app and nowhere else.
+
+   Where a command, URL, or argument needs the value, write `${THE_NAME}`.
+   Install commands can't use Variables.
 3. The tool needs no credential. That is normal for a skill. For anything that
    reaches the product, check before you decide it, because a tool that appears
    to need nothing is often getting a credential some other way.

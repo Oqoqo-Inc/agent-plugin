@@ -10,7 +10,7 @@
     "Show the Oqoqo project context for this request.",
     "List the latest experiments in this Oqoqo project and summarize their status."
   ],
-  "releaseNotes": "Version 1.3.7 tells an AI assistant that a schedule refusal and preview_schedule name every blocker at once, each with its fix link (blockers, details.blockers), and that after the person fixes them, manage_schedule resume is the one step: it checks the launch and resumes. The manage_schedule and preview_schedule descriptions say the same. Version 1.3.6 tells an AI assistant what to do when a launch reports mcp_header_values_unbound: an MCP server version would send its saved header values to an address that no person bound them to, such as a version saved at a new URL. The assistant gives the person the blocker's setupUrl, the version's Tools tab, where the person checks the address and selects Refresh. The refresh_mcp_server_tools description now says that a person's Refresh binds the values. The package still declares only the authenticated Oqoqo product MCP, with the same four guided product-eval skills. Credentials stay outside the package in the secure review form.",
+  "releaseNotes": "Version 1.3.8 corrects how the product-eval-setup skill refers to a declared value: write ${NAME} in a setup or post-install command and in an MCP server's url, command, or args. Install commands can't use Variables. The tool input descriptions say the same. The package still declares only the authenticated Oqoqo product MCP, with the same four guided product-eval skills. Credentials stay outside the package in the secure review form.",
   "positiveTestCases": [
     {
       "name": "Read identity",
