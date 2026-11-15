@@ -10,7 +10,7 @@
     "Show the Oqoqo project context for this request.",
     "List the latest experiments in this Oqoqo project and summarize their status."
   ],
-  "releaseNotes": "Version 1.3.13 changes the plugin's brand color to Oqoqo purple (#6851BC), so the listing matches the product's new look. The skills, tools, and MCP server are unchanged. The package still declares only the authenticated Oqoqo product MCP, with the same four guided product-eval skills. Credentials stay outside the package in the secure review form.",
+  "releaseNotes": "Version 1.3.14 updates the product-eval-results skill and two tool descriptions. get_experiment_brief now counts each friction under a difference on the worse side's failed runs and the other side's passed runs, returns each difference as an issue in Markdown (issueMarkdown), and offers afterFix for a clear difference with a friction to fix in the product; get_experiment_plan takes after_fix to plan those runs. It keeps the Oqoqo purple brand color (#6851BC) from 1.3.13. The package still declares only the authenticated Oqoqo product MCP, with the same four guided product-eval skills. Credentials stay outside the package in the secure review form.",
   "positiveTestCases": [
     {
       "name": "Read identity",
