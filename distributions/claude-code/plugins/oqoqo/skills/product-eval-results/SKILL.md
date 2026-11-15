@@ -149,21 +149,22 @@ next one to go to when you need more detail.
 | What did the agent leave behind? | `get_run_output`, part `manifest` | the diff or one file |
 
 Read the Brief first when someone asks what an experiment showed, or why a
-treatment or an agent did worse. `get_experiment_brief` returns
-`answerHeadline`, the first answer of the experiment's comparisons, and at
-most 5 `findings`: the main comparisons with a clear or likely difference,
-then clear differences for one agent alone or between agents. Each finding
-has its answer in the words the dashboard shows (`headline`, `sides`,
-`verdict`, `nextStep`), one written `sentence`, and the frictions seen with
+treatment or an agent did worse. `get_experiment_brief` returns `summary`,
+the experiment's answer in one sentence (say it first), and at most 5
+`findings`: the main comparisons with a clear or likely difference, then
+clear differences for one agent alone or between agents. Each finding has
+its difference in the words the dashboard shows (`name`, `sides`,
+`taskLine`, `verdict`, `nextStep`, `byAgent`), one written `sentence`, and
+the frictions seen with
 `worseSide`, counted for both sides: `failedRuns` is how many of the worse
 side's failed runs had the friction, and `passedRuns` how many of the other
-side's passed runs had it. Say the `headline` and the `verdict` as
+side's passed runs had it. Say the `summary` and each `verdict` as
 written. Such a friction was seen with the side that did worse. That does
 not mean it caused the difference: say "seen with", never "because",
 and give both sides' counts as the dashboard does: "Raw Agent 24 of 28
 failed runs · Stripe CLI 0 of 26 passed runs". Add no number and no reason of your own. When
-`comparisonsLeftOut` or `frictionsLeftOut` is above 0, say that the Brief
-does not show everything.
+`comparisonsLeftOut` is above 0, say that the Brief does not show every
+difference. `list_frictions` lists every friction of the experiment.
 
 To file a difference as an issue, use its `issueMarkdown` exactly as it is:
 its headline is the title, and it holds both sides, the result, the
@@ -246,18 +247,19 @@ which is normally the baseline. Read these before you call a difference real.
   Check the tasks behind the totals before you recommend it.
 - **Check whether the difference holds.** `get_evals_comparisons` compares
   each treatment with the baseline, and each pair of agents, on the same
-  tasks. Start with `answers`: the answers to the experiment's question, in
-  the order to say them. They are the main comparisons first, whatever
-  their result, then a comparison for one agent alone or between agents
-  only when its difference is `clear`. Lead with a main comparison. A
-  `likely` result for one agent alone or between agents is never an answer:
-  it is in `comparisons`, and `restLine` counts it. Each answer has a
-  `headline` (who did better, and on how many tasks), `sides` (each side's
-  passes, runs and whole `percent`, the side that did better first), a
-  `verdict` (the result label), a `nextStep`, and `byAgent` (how many agents
-  did better with the same side). Say the `headline` and the `verdict` as
-  written, and do not reword a result. `restLine` says what the answers
-  leave out. `comparisons` lists every comparison with the same fields, its
+  tasks. Start with `summary`: the answer to the experiment's question in
+  one sentence, over its main comparisons. Then `differences`: one block
+  for each difference, in the order to say them, the main comparisons with
+  a clear or likely difference first, then a comparison for one agent alone
+  or between agents only when its difference is `clear`. A `likely` result
+  for one agent alone or between agents is never in `differences`: it is in
+  `comparisons`, and `restLine` counts it. Each block has a `name` (its two
+  sides), `sides` (each side's passes, runs and whole `percent`, the side
+  that did better first), a `taskLine` (how the tasks went), a `verdict`
+  (the result label), a `nextStep`, and `byAgent` (how many agents did
+  better with the same side). Say the `summary` and each `verdict` as
+  written, and do not reword a result. `restLine` says what `summary` and
+  `differences` leave out. `comparisons` lists every comparison with the same fields, its
   `groupLabel` and its `taskSplit`.
 - **Read the label.** `clear` means one side did better on enough tasks to
   be confident, `likely` means one side is ahead but more runs are needed to
