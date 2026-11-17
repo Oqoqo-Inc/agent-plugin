@@ -194,7 +194,7 @@ export async function validateRelease(rootPath) {
   }
 
   console.log(
-    `Validated public Oqoqo plugin release ${portableManifest.version}.`,
+    `Validated public Oqoqo Plugin release ${portableManifest.version}.`,
   );
 }
 
