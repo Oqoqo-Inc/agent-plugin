@@ -3,7 +3,10 @@
   "mcpServers": {
     "oqoqo": {
       "type": "streamable-http",
-      "url": "https://mcp.oqoqo.ai/mcp"
+      "url": "https://mcp.oqoqo.ai/mcp",
+      "headers": {
+        "X-Oqoqo-Plugin": "oqoqo@oqoqo/1.3.17"
+      }
     }
   }
 }

@@ -148,14 +148,23 @@ export async function validateRelease(rootPath) {
     "Claude version drifted",
   );
 
-  await validateMcp(resolve(root, "plugins/oqoqo/mcp.json"), "streamable-http");
+  // Each installed copy names itself to the server, except the package that
+  // OpenAI reviews.
+  const headers = {
+    "X-Oqoqo-Plugin": `${PLUGIN_NAME}@${MARKETPLACE_NAME}/${portableManifest.version}`,
+  };
+  await validateMcp(resolve(root, "plugins/oqoqo/mcp.json"), {
+    type: "streamable-http",
+    url: PRODUCTION_MCP_URL,
+    headers,
+  });
   await validateMcp(
     resolve(root, "distributions/openai/plugins/oqoqo/.mcp.json"),
-    "http",
+    { type: "http", url: PRODUCTION_MCP_URL },
   );
   await validateMcp(
     resolve(root, "distributions/claude-code/plugins/oqoqo/.mcp.json"),
-    "http",
+    { type: "http", url: PRODUCTION_MCP_URL, headers },
   );
 
   await validateOpenAiMarketplace(root);
@@ -235,17 +244,14 @@ async function validatePortableMarketplace(root, path, version) {
   assert.equal(plugin.source, "./plugins/oqoqo");
 }
 
-async function validateMcp(path, expectedType) {
+async function validateMcp(path, expectedServer) {
   const document = await json(path);
   assert.deepEqual(
     Object.keys(document.mcpServers ?? {}),
     [PLUGIN_NAME],
     "Release must contain only the authenticated product MCP server",
   );
-  assert.deepEqual(document.mcpServers[PLUGIN_NAME], {
-    type: expectedType,
-    url: PRODUCTION_MCP_URL,
-  });
+  assert.deepEqual(document.mcpServers[PLUGIN_NAME], expectedServer);
 }
 
 async function validateSkills(root) {
