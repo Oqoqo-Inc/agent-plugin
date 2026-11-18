@@ -139,7 +139,6 @@ next one to go to when you need more detail.
 | What did the experiment show, or why did a treatment or an agent do worse? | `get_experiment_brief` | `get_evals_comparisons` for every comparison, then `get_friction` for one friction's evidence |
 | Which treatment did better? | `analyze_results`, mode `compare_treatments` | `list_runs` filtered to one treatment |
 | Does a difference hold up? | `get_evals_comparisons` | `get_experiment_plan` with the comparison's `comparison_id`, to plan the runs that check it again |
-| File a difference as an issue | `get_experiment_brief`, the finding's `issueMarkdown` | `get_friction` for each friction it lists |
 | Did a fix work? | `get_experiment_brief`, the finding's `afterFix` | `get_experiment_plan` with its `comparison_id` and `after_fix: true` |
 | Why did this run pass or fail? | `get_evals_results` for its verdict and `outcomeExplanation` | `analyze_results`, mode `get_run_evidence`, then `get_run_trajectory` around the steps it cites |
 | Did the agent use the tool? | `get_run_profile`, or `treatmentUse` in `list_runs` | `get_run_trajectory` from the first step that used it |
@@ -165,12 +164,6 @@ and give both sides' counts as the dashboard does: "Raw Agent 24 of 28
 failed runs · Stripe CLI 0 of 26 passed runs". Add no number and no reason of your own. When
 `comparisonsLeftOut` is above 0, say that the Brief does not show every
 difference. `list_frictions` lists every friction of the experiment.
-
-To file a difference as an issue, use its `issueMarkdown` exactly as it is:
-its headline is the title, and it holds both sides, the result, the
-sentence, the frictions with where to fix each, and the links. Do not
-rewrite it or add a cause. Ask before you create an issue in someone's
-tracker.
 
 A clear difference that lists a friction to fix in the product carries
 `afterFix` (its `text`, `taskCount`, and `runs`). Once the team has shipped
