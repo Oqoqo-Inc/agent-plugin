@@ -315,3 +315,30 @@ Every number in the report comes from a tool result in this session. Give the
 public IDs of the experiment, the runs and the trials you cite, and the step
 ordinals of the steps you quote. Say what is still pending, what was too small
 to decide, and what you would read next.
+
+
+## Fix a tool and check the next development version
+
+When asked to improve an MCP, CLI or SDK from frictions, read `get_friction` and the cited
+run steps first. A friction is evidence of difficulty, not proof of its cause.
+Reproduce the problem in the user's checkout, make the fix, and run a focused
+regression check. Follow product-eval-setup's development package instructions
+to upload the code and retain its version receipt.
+
+Clone the source experiment with `get_experiment_plan` and
+`version_mode: "experiment"` (CLI: `experiments clone-plan --versions experiment`)
+so the same task versions are
+used. Preserve its agents, environments, rubrics, other tools, and run count.
+Create a treatment containing the returned development version and replace
+only that tool reference (`mcpServerVersionIds`, `cliVersionIds` or `sdkVersionIds`);
+do not rebuild the treatment from scratch or leave its published version in the
+replacement treatment. Point the cloned plan at
+that treatment, preflight, state the run count, then launch within the user's
+authorization. Keep the source experiment and development version IDs in the
+handoff. If `afterFix` offers a focused comparison, use its plan when appropriate.
+
+Follow the new experiment through runs, Evals, and Insights. Compare the new
+results with the source, cite the new evidence, and report remaining frictions.
+Repeat with the next development revision when authorized. Uploading alone is
+not evidence that the fix works, and this workflow does not publish the package
+or mark it official.

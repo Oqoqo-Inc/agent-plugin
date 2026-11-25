@@ -152,3 +152,179 @@ cheap run on a task that only reports what it can see, e.g., which capabilities
 are present and where they were found. It costs a single run and tells you
 whether the tools actually reached the agent, which is otherwise invisible
 until a whole matrix comes back wrong.
+
+
+## Decide what a development version can test
+
+A development package carries only the code that runs in the experiment
+environment. It calls the product's hosted API as that API is today. Find
+where the fix lives before you upload anything:
+
+- In the MCP, CLI, or SDK code, such as tool descriptions, input schemas,
+  paging, errors, or output shape: upload that code as a package.
+- In the hosted API or backend: a package cannot carry it, and a client that
+  sends a new parameter fails until the API accepts it. Deploy the change to a
+  non-production URL, then point a new MCP version at that URL, or pass the
+  base URL to the package as an environment name.
+- In an MCP server that needs the product's database or internal credentials:
+  that server cannot run in the experiment environment. Package a small MCP
+  that forwards to the hosted server and changes only what the agent sees, or
+  use a non-production URL.
+
+Tell the user when a fix cannot be tested this way, rather than uploading a
+package that cannot show it.
+
+Development packages are available only to organizations with the rollout.
+When an upload or launch says they are not available for the organization,
+tell the user rather than retrying.
+
+
+## Test a local MCP change as a development version
+
+A Local MCP runs inside the experiment environment, not on the developer's
+laptop. Upload its code as an MCP development package; keep product code out
+of Machines. Its backend can remain hosted. Declare the environment names the
+MCP reads and use the authenticated Web setup for their values. Remote MCP
+headers do not automatically become environment variables.
+
+In the checkout, create `oqoqo.mcp.json` with an explicit file list:
+
+```json
+{
+  "command": "node",
+  "args": ["dist/index.js"],
+  "files": ["dist", "package.json", "package-lock.json"],
+  "installCommands": ["npm ci --omit=dev"],
+  "envNames": ["PRODUCT_API_URL", "PRODUCT_API_KEY"]
+}
+```
+
+Run the build before packaging when the file list contains build output. Include
+its runtime dependencies and lockfile. Install commands run in the package
+folder during image construction and do not receive tool secrets. Put runtime
+configuration in environment variables, not install commands or source files.
+The CLI excludes common credential files and caches; inspect the explicit file
+list for other sensitive files before uploading. A dependency-free MCP can use
+an empty `installCommands` list. Agents in the run can read the installed
+package, so do not describe the expected fix in its comments or file names.
+
+For an HTTP-only package, add `connection` to the manifest (or the upload
+operation beside `definition`):
+
+```json
+"connection": {
+  "transport": "http",
+  "port": 8080,
+  "path": "/mcp",
+  "readinessPath": "/health",
+  "startupTimeoutSeconds": 60
+}
+```
+
+The command must listen on `0.0.0.0` at the declared port. Oqoqo starts a private
+service for each run, waits for readiness, connects using native HTTP, and removes
+it when the environment is cleaned up. Omit `readinessPath` for TCP readiness;
+a health path must return unauthenticated HTTP success. Use `transport: "sse"`
+with the server's SSE path for legacy SSE. Omit `connection` for stdio.
+For authentication between the agent and the packaged MCP, optional
+`headerEnv: {"Authorization":"MCP_AUTHORIZATION"}` reads the full header value
+from a declared environment name. Configure its value, including any Bearer
+prefix, in the Web editor. No value belongs in the manifest.
+
+Services inherit image-time Machine packages and package install commands.
+Machine runtime setup and CLI post-install run only in the agent container;
+service startup configuration belongs in its command and environment variables.
+Service files are a separate copy of the frozen image, not live agent file edits.
+
+Inspect the existing MCP with `inspect_resource` or `oqoqo resources inspect`
+for the chosen base `mcpver_` ID and development facts. Read the current revision
+(`updatedAt`) from `inspect_catalog` with `projection: "full"` (CLI:
+`oqoqo catalog list --kind mcp --projection full`), or from the previous push's
+receipt. A version's own `updatedAt` in `inspect_resource` is not the revision
+an upload checks. Then run the installed CLI (check `oqoqo schema "mcp push"` for availability):
+
+```sh
+oqoqo mcp push . --project-id <project-id> --target <mcp-id> \
+  --base-version <base-mcpver-id> --expected-updated-at <current-updated-at> \
+  --output json
+```
+
+Keep the original base ID when iterating v1.1 to v1.2. Use the current checkout,
+including earlier fixes, and pass the previous receipt's `updatedAt` (or
+re-read it from the full catalog projection) before each push. An upload
+creates an immutable development version. It leaves the official version and
+existing treatments unchanged. Use the receipt's version ID to create the new
+treatment. Upload success verifies the package, not dependency installation or
+MCP startup; prove those with a small experiment.
+
+The MCP adapter uses the same operation through `create_upload`: an operation
+with `kind: "mcp"`, `action: "update"`, `targetKey`, `expectedUpdatedAt`,
+`baseVersionId`, a Local `definition`, and `installCommands`. Transfer the ZIP
+only to the returned transfer target using its own headers, then call
+`complete_upload`. Use `get_upload` to recover a pending receipt; retry
+completion on the same upload after an interrupted response. If local file
+transfer is unavailable, give the person the returned authenticated upload page.
+Never send credentials or archive bytes as MCP tool arguments.
+
+## Test a local CLI change as a development version
+
+Use the same immutable package loop for a CLI. Keep code out of Machines. In the
+checkout, create `oqoqo.cli.json` with an explicit `files` list and `definition`:
+
+```json
+{
+  "files": ["dist", "package.json", "package-lock.json"],
+  "definition": {
+    "install": {"manager": "custom", "command": "npm ci --omit=dev && npm install -g ."},
+    "commands": ["my-cli"],
+    "postInstall": [],
+    "variables": [{"name": "PRODUCT_API_KEY", "required": true}]
+  }
+}
+```
+
+The install runs from the uploaded directory without runtime secrets and must
+put the declared commands on PATH. For a compiled CLI, include a Linux binary
+for each architecture the environment can use, and an install script that puts
+the right one on PATH. Build it for the environment the tasks call. Post-install commands and variables retain
+normal CLI behavior; values stay in authenticated Web setup. Include lockfiles
+and inspect selected files, following the same package exclusions as MCPs.
+
+Read the CLI's current revision (`updatedAt` from `oqoqo catalog list --kind cli
+--projection full` or the previous push's receipt) and its published `cliver_`
+base, then run
+`oqoqo cli push . --project-id <project-id> --target <cli-id> --base-version <base-cliver-id> --expected-updated-at <current-updated-at> --output json`.
+Check availability with `oqoqo schema "cli push"`. Keep the original published
+base when iterating. MCP `create_upload` accepts the same `kind: "cli"`,
+`action: "update"`, `targetKey`, `expectedUpdatedAt`, `baseVersionId`, and
+`definition`; transfer/complete/recovery are identical to the MCP package flow.
+
+Select the returned CLI version in a treatment and run an experiment to verify
+installation and behavior. Official versions and existing treatments stay
+unchanged. Use friction evidence to fix the checkout and upload the next
+development revision.
+
+
+## Test a local SDK change as a development version
+
+Use the same package loop for SDKs. Create `oqoqo.sdk.json` with an explicit
+`files` list and `definition.install` containing a custom command that builds
+and installs the library from the uploaded directory. Include source, dependency
+manifests and lockfiles. Declare only variable names; configure values on Web.
+SDKs do not declare executable commands or post-install commands.
+
+Read the SDK's current revision (`updatedAt` from `oqoqo catalog list --kind sdk
+--projection full` or the previous push's receipt) and its published `sdkver_`
+base, then run
+`oqoqo sdk push . --project-id <project-id> --target <sdk-id> --base-version <base-sdkver-id> --expected-updated-at <current-updated-at> --output json`.
+Check availability with `oqoqo schema "sdk push"`. MCP `create_upload` accepts
+the same operation as CLI packages with `kind: "sdk"`; transfer, completion and
+retry use the same upload session. Never send archive bytes or credentials as
+MCP arguments. Keep the original published base for the next revision.
+
+Select the returned SDK version in a treatment. Run an experiment that imports
+and calls the SDK, follow its Evals and Insights, fix the demonstrated friction,
+and upload the next development revision. Preserve the task, Machine, agents,
+other tools and rubric for the rerun. The Machine supplies language/build tools;
+the package install command supplies library dependencies. Uploading does not
+mark the version official or update existing treatments.
